@@ -1,0 +1,59 @@
+package com.healthtech.misalud
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.healthtech.misalud.components.home.ui.HomeViewModel
+import com.healthtech.misalud.components.login.ui.LoginScreen
+import com.healthtech.misalud.components.login.ui.LoginViewModel
+import com.healthtech.misalud.components.navcontroller.ui.NavigationController
+import com.healthtech.misalud.components.profile.ui.ProfileViewModel
+import com.healthtech.misalud.components.registry.ui.RegistryScreen_1
+import com.healthtech.misalud.components.registry.ui.RegistryViewModel
+import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
+import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
+import com.healthtech.misalud.ui.theme.MiSaludTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            MiSaludTheme {
+                val context = LocalContext.current
+
+                val tokenManager = TokenManagement(context)
+                val userManager = UserManagement(context)
+
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navigationController  = rememberNavController()
+                    val refreshToken = tokenManager.getRefreshToken()
+                    val phoneNumber = userManager.getUserAttributeString("phoneNumebr")
+
+                    val entryPoint : String = if(refreshToken == null && phoneNumber == null){
+                        "LoginScreen"
+                    } else {
+                        "HomeScreen"
+                    }
+
+                    NavHost(navController = navigationController, startDestination = entryPoint){
+                        composable("LoginScreen") { LoginScreen(navigationController, LoginViewModel(context)) }
+                        composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel()) }
+                        composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
+                    }
+                }
+            }
+        }
+    }
+}
