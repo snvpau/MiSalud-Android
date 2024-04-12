@@ -93,7 +93,7 @@ fun Registry_1(navigationController: NavHostController, modifier: Modifier, view
             textValue=confirmPassword,
             spaced=true
         ) { viewModel.onRegisterFormChanged(firstName, lastName, phoneNumber, password, it) }
-        RegisterButton(registerEnabled = registerEnabled)
+        RegisterButton(registerEnabled = registerEnabled, viewModel, navigationController)
         AccountsDivider()
         LoginLegend(
             navigationController = navigationController,
@@ -166,11 +166,11 @@ fun PasswordField(title: String, textValue: String, spaced: Boolean, onChange: (
 }
 
 @Composable
-fun RegisterButton(registerEnabled: Boolean) {
+fun RegisterButton(registerEnabled: Boolean, registryViewModel: RegistryViewModel, navigationController: NavHostController) {
     Spacer(modifier = Modifier.padding(10.dp))
     Button(
         enabled = registerEnabled,
-        onClick = {},
+        onClick = { registryViewModel.onRegisterSelected(navigationController) },
         modifier = Modifier.fillMaxWidth().height(48.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(44, 90, 168),

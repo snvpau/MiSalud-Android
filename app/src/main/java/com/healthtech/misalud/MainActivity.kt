@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navigationController, startDestination = entryPoint){
                         composable("LoginScreen") { LoginScreen(navigationController, LoginViewModel(context)) }
-                        composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel()) }
+                        composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel(context)) }
                         composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
                     }
                 }
