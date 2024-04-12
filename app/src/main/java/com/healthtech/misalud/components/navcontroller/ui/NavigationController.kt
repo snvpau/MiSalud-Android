@@ -62,7 +62,7 @@ fun NavHostContainer(
                 Search()
             }
             composable("profile") {
-                ProfileScreen(profileViewModel, localNavController, globalNavController)
+                ProfileScreen(profileViewModel, globalNavController)
             }
         }
     )
