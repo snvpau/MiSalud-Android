@@ -1,10 +1,11 @@
-package com.healthtech.misalud.components.home.ui
+package com.healthtech.misalud.screens.home.vm
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.healthtech.misalud.core.network.data.services.HomeService
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
@@ -47,5 +48,9 @@ class HomeViewModel(context: Context) : ViewModel() {
 
             _isLoading.value = false
         }
+    }
+
+    fun navigate(navigationController: NavHostController, route: String){
+        navigationController.navigate(route)
     }
 }

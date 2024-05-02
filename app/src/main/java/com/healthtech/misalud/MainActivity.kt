@@ -11,15 +11,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.healthtech.misalud.components.home.ui.HomeViewModel
-import com.healthtech.misalud.components.login.ui.LoginScreen
-import com.healthtech.misalud.components.login.ui.LoginViewModel
-import com.healthtech.misalud.components.navcontroller.ui.NavigationController
-import com.healthtech.misalud.components.profile.ui.ProfileViewModel
-import com.healthtech.misalud.components.registry.ui.RegistryScreen_1
-import com.healthtech.misalud.components.registry.ui.RegistryViewModel
+import com.healthtech.misalud.screens.home.vm.HomeViewModel
+import com.healthtech.misalud.screens.login.ui.LoginScreen
+import com.healthtech.misalud.screens.login.vm.LoginViewModel
+import com.healthtech.misalud.screens.navigationcontroller.ui.NavigationController
+import com.healthtech.misalud.screens.profile.vm.ProfileViewModel
+import com.healthtech.misalud.screens.registry.ui.RegistryScreen_1
+import com.healthtech.misalud.screens.registry.vm.RegistryViewModel
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
+import com.healthtech.misalud.screens.habits.meals.records.ui.MealRecordScreen
+import com.healthtech.misalud.screens.habits.meals.registry.ui.MealRegistryScreen
 import com.healthtech.misalud.ui.theme.MiSaludTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,13 +46,15 @@ class MainActivity : ComponentActivity() {
                     val entryPoint : String = if(refreshToken == null && phoneNumber == null){
                         "LoginScreen"
                     } else {
-                        "HomeScreen"
+                        "LoginScreen"
                     }
 
                     NavHost(navController = navigationController, startDestination = entryPoint){
                         composable("LoginScreen") { LoginScreen(navigationController, LoginViewModel(context)) }
                         composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel(context)) }
                         composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
+                        composable("MealRecord") { MealRecordScreen() }
+                        composable("MealRegistry") { MealRegistryScreen() }
                     }
                 }
             }
