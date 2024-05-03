@@ -1,4 +1,4 @@
-package com.healthtech.misalud.components.login.ui
+package com.healthtech.misalud.screens.login.vm
 
 import android.content.Context
 import android.util.Log

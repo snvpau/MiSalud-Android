@@ -1,4 +1,4 @@
-package com.healthtech.misalud.components.profile.ui
+package com.healthtech.misalud.screens.profile.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.healthtech.misalud.screens.profile.vm.ProfileViewModel
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel, globalNavController: NavController) {

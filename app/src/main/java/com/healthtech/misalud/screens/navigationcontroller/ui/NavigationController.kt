@@ -1,4 +1,4 @@
-package com.healthtech.misalud.components.navcontroller.ui
+package com.healthtech.misalud.screens.navigationcontroller.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -17,11 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.healthtech.misalud.components.home.ui.HomeScreen
-import com.healthtech.misalud.components.home.ui.HomeViewModel
-import com.healthtech.misalud.components.home.ui.Search
-import com.healthtech.misalud.components.profile.ui.ProfileScreen
-import com.healthtech.misalud.components.profile.ui.ProfileViewModel
+import com.healthtech.misalud.screens.home.ui.HomeScreen
+import com.healthtech.misalud.screens.home.vm.HomeViewModel
+import com.healthtech.misalud.screens.profile.ui.ProfileScreen
+import com.healthtech.misalud.screens.profile.vm.ProfileViewModel
 import com.healthtech.misalud.uils.Constants
 
 @Composable
@@ -37,7 +36,8 @@ fun NavigationController(globalNavController : NavHostController, homeViewModel:
                 padding = padding,
                 homeViewModel = homeViewModel,
                 profileViewModel = profileViewModel
-            )}
+            )
+            }
         )
     }
 }
@@ -56,10 +56,7 @@ fun NavHostContainer(
         modifier = Modifier.padding(paddingValues = padding),
         builder = {
             composable("home") {
-                HomeScreen(viewModel = homeViewModel)
-            }
-            composable("search") {
-                Search()
+                HomeScreen(homeViewModel, globalNavController)
             }
             composable("profile") {
                 ProfileScreen(profileViewModel, globalNavController)

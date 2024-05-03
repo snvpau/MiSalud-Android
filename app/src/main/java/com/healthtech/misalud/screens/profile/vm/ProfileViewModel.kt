@@ -1,4 +1,4 @@
-package com.healthtech.misalud.components.profile.ui
+package com.healthtech.misalud.screens.profile.vm
 
 import android.content.Context
 import androidx.lifecycle.LiveData
