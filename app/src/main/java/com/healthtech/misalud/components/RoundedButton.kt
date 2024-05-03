@@ -23,6 +23,7 @@ fun Modifier.conditional(condition : Boolean, modifier : Modifier.() -> Modifier
 @Composable
 fun RoundedButton(
     text: String,
+    onClick: () -> Unit,
     bold: Boolean = false,
     backgroundColor: Color = Color(241, 242, 246),
     contentColor: Color = Color.Black,
@@ -39,7 +40,7 @@ fun RoundedButton(
 
     Button(
         enabled = enabled,
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier.conditional(fullWidth){ fillMaxWidth() },
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor,

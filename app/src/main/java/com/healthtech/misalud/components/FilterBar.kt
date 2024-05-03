@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 fun FilterBar(){
     Spacer(modifier = Modifier.padding(8.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)){
-        RoundedButton(text = "Hoy", bold = true)
-        RoundedButton(text = "Ayer", bold = true)
-        RoundedButton(text = "Seleccionar Fecha", bold = true)
+        RoundedButton(text = "Hoy", bold = true, onClick = {})
+        RoundedButton(text = "Ayer", bold = true, onClick = {})
+        RoundedButton(text = "Seleccionar Fecha", bold = true, onClick = {})
     }
 }
