@@ -22,6 +22,7 @@ import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
 import com.healthtech.misalud.screens.habits.meals.records.ui.MealRecordScreen
 import com.healthtech.misalud.screens.habits.meals.registry.ui.MealRegistryScreen
+import com.healthtech.misalud.screens.habits.meals.registry.vm.MealRegistryViewModel
 import com.healthtech.misalud.ui.theme.MiSaludTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel(context)) }
                         composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
                         composable("MealRecord") { MealRecordScreen() }
-                        composable("MealRegistry") { MealRegistryScreen() }
+                        composable("MealRegistry") { MealRegistryScreen(MealRegistryViewModel(navigationController)) }
                     }
                 }
             }

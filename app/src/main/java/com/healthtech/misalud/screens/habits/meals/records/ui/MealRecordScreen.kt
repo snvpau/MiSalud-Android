@@ -64,7 +64,7 @@ fun Body(){
 
 @Composable
 fun Footer(){
-    RoundedButton(text = "Agregar Comida", fullWidth = true, bold = true)
+    RoundedButton(text = "Agregar Comida", fullWidth = true, bold = true, onClick = {})
 }
 
 @Preview(showSystemUi = true)

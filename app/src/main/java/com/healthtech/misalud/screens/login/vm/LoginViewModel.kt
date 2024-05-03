@@ -10,13 +10,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
-import com.healthtech.misalud.core.network.data.services.LoginService
+import com.healthtech.misalud.core.network.data.services.AuthService
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
 import kotlinx.coroutines.launch
 
 class LoginViewModel(context: Context) : ViewModel() {
 
-    private val loginService = LoginService()
+    private val loginService = AuthService()
     private val tokenManager = TokenManagement(context)
     private val userManager = UserManagement(context)
 

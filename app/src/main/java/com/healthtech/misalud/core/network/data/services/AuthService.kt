@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-class LoginService {
+class AuthService {
     private val retrofit = RetrofitHelper.getRetrofitAuth()
 
     suspend fun doLogin(phoneNumber: String, password: String) : LoginResponse {
