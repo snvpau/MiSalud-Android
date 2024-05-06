@@ -11,18 +11,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.healthtech.misalud.screens.home.vm.HomeViewModel
-import com.healthtech.misalud.screens.login.ui.LoginScreen
-import com.healthtech.misalud.screens.login.vm.LoginViewModel
-import com.healthtech.misalud.screens.navigationcontroller.ui.NavigationController
-import com.healthtech.misalud.screens.profile.vm.ProfileViewModel
-import com.healthtech.misalud.screens.registry.ui.RegistryScreen_1
-import com.healthtech.misalud.screens.registry.vm.RegistryViewModel
+import com.healthtech.misalud.ui.screens.home.vm.HomeViewModel
+import com.healthtech.misalud.ui.screens.login.ui.LoginScreen
+import com.healthtech.misalud.ui.screens.login.vm.LoginViewModel
+import com.healthtech.misalud.ui.screens.navigationcontroller.ui.NavigationController
+import com.healthtech.misalud.ui.screens.profile.vm.ProfileViewModel
+import com.healthtech.misalud.ui.screens.registry.ui.RegistryScreen_1
+import com.healthtech.misalud.ui.screens.registry.vm.RegistryViewModel
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
-import com.healthtech.misalud.screens.habits.meals.records.ui.MealRecordScreen
-import com.healthtech.misalud.screens.habits.meals.registry.ui.MealRegistryScreen
-import com.healthtech.misalud.screens.habits.meals.registry.vm.MealRegistryViewModel
+import com.healthtech.misalud.ui.screens.habits.meals.records.ui.MealRecordScreen
+import com.healthtech.misalud.ui.screens.habits.meals.registry.ui.MealRegistryScreen
+import com.healthtech.misalud.ui.screens.habits.meals.registry.vm.MealRegistryViewModel
 import com.healthtech.misalud.ui.theme.MiSaludTheme
 
 class MainActivity : ComponentActivity() {
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel(context)) }
                         composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
                         composable("MealRecord") { MealRecordScreen() }
-                        composable("MealRegistry") { MealRegistryScreen(MealRegistryViewModel(navigationController)) }
+                        composable("MealRegistry") { MealRegistryScreen(MealRegistryViewModel(navigationController, context)) }
                     }
                 }
             }
