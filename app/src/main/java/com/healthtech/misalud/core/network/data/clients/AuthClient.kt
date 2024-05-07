@@ -8,12 +8,12 @@ import retrofit2.http.POST
 
 interface AuthClient {
     @POST("/api/v1/auth/login")
-    suspend fun doLogin(@Body loginRequest: AuthRequests.LoginRequest) : Response<AuthResponses.LoginResponse>
+    suspend fun doLogin(@Body loginRequest: AuthRequests.PostLogin) : Response<AuthResponses.LoginResponse>
 
     @POST("/api/v1/auth/logout")
-    suspend fun doLogout(@Body logoutRequest: AuthRequests.LogoutRequest) : Response<AuthResponses.LogoutResponse>
+    suspend fun doLogout(@Body logoutRequest: AuthRequests.PostLogout) : Response<AuthResponses.LogoutResponse>
 
     @POST("/api/v1/auth/register")
-    suspend fun doRegisterUser(@Body registryRequest: AuthRequests.RegistryRequest) : Response<AuthResponses.LoginResponse>
+    suspend fun doRegisterUser(@Body registryRequest: AuthRequests.PostRegistry) : Response<AuthResponses.LoginResponse>
 }
 

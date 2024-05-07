@@ -7,7 +7,8 @@ class AuthResponses {
         val error: RequestError?,
         val success: Boolean?,
         val accessToken: String?,
-        val refreshToken: String?
+        val refreshToken: String?,
+        val uuid: String?
     )
 
     data class LogoutResponse (

@@ -59,6 +59,10 @@ class LoginViewModel(context: Context) : ViewModel() {
                 _tokenManager.saveRefreshToken(result.refreshToken.toString())
 
                 _userManager.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
+
+                Log.i("saveUUID", result.uuid.toString())
+                _userManager.saveUserAttributeString("uuid", result.uuid.toString())
+
                 Log.i("LoginViewModel", "Tokens Saved")
 
                 navigationController.navigate("HomeScreen"){

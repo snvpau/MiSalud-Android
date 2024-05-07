@@ -33,17 +33,20 @@ fun RoundedButton(
     fullWidth: Boolean = false,
     spaced: Boolean = true,
     padding: Int = 8,
+    selected: Boolean = false
 ){
     if(spaced){
         Spacer(modifier = Modifier.padding(padding.dp))
     }
+
+    val color = if (selected) Color(44, 90, 168) else backgroundColor
 
     Button(
         enabled = enabled,
         onClick = onClick,
         modifier = Modifier.conditional(fullWidth){ fillMaxWidth() },
         colors = ButtonDefaults.buttonColors(
-            containerColor = backgroundColor,
+            containerColor = color,
             contentColor = contentColor,
             disabledContainerColor = disabledBackgroundColor,
             disabledContentColor = disabledContentColor

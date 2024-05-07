@@ -32,7 +32,7 @@ fun RadialSelector(
         Spacer(modifier = Modifier.padding(paddingTop.dp))
     }
 
-    items.forEach {item ->
+    items.forEach { item ->
         Surface(
             shape = RoundedCornerShape(12.dp),
             border = BorderStroke(1.dp, Color(223, 225, 225)),

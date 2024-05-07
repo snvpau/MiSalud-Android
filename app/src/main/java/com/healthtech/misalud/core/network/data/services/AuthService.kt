@@ -13,7 +13,7 @@ class AuthService {
     private val retrofit = RetrofitHelper.getRetrofitAuth()
 
     suspend fun doLogin(phoneNumber: String, password: String) : AuthResponses.LoginResponse {
-        val loginRequest = AuthRequests.LoginRequest(phoneNumber, password)
+        val loginRequest = AuthRequests.PostLogin(phoneNumber, password)
 
         return withContext(Dispatchers.IO){
             val response = retrofit.create(AuthClient::class.java).doLogin(loginRequest)
@@ -28,7 +28,7 @@ class AuthService {
     }
 
     suspend fun doLogout(refreshToken: String) : AuthResponses.LogoutResponse {
-        val logoutRequest = AuthRequests.LogoutRequest(refreshToken)
+        val logoutRequest = AuthRequests.PostLogout(refreshToken)
 
         return withContext(Dispatchers.IO){
             val response = retrofit.create(AuthClient::class.java).doLogout(logoutRequest)
@@ -43,7 +43,7 @@ class AuthService {
     }
 
     suspend fun doCreateAccount(firstName: String, lastName: String, phoneNumber: String, password: String) : AuthResponses.LoginResponse {
-        val registryRequest = AuthRequests.RegistryRequest(firstName, lastName, phoneNumber, password)
+        val registryRequest = AuthRequests.PostRegistry(firstName, lastName, phoneNumber, password)
 
         return withContext(Dispatchers.IO){
             val response = retrofit.create(AuthClient::class.java).doRegisterUser(registryRequest)

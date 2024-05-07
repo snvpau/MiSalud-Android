@@ -12,8 +12,27 @@ import retrofit2.http.Query
 interface PeopleClient {
 
     @GET("/api/v1/people/user")
-    suspend fun doGetUser(@Header("Authorization") accessToken: String, @Query("phoneNumber") phoneNumber: String) : Response<PeopleResponses.HomeResponse>
+    suspend fun doGetUser(
+        @Header("Authorization") accessToken: String,
+        @Query("phoneNumber") phoneNumber: String
+    ) : Response<PeopleResponses.GetUserData>
+
+    @GET("/api/v1/people/getRecordDays")
+    suspend fun doGetRecordDays(
+        @Header("Authorization") accessToken: String,
+        @Query("uuid") uuid: String
+    ) : Response<PeopleResponses.GetRecordDays>
+
+    @GET("/api/v1/people/meals")
+    suspend fun doGetRecords(
+        @Header("Authorization") accessToken: String,
+        @Query("uuid") uuid: String,
+        @Query("range") range: String
+    ) : Response<PeopleResponses.GetMealRecords>
 
     @POST("/api/v1/people/meals")
-    suspend fun doAddRecord(@Header("Authorization") accessToken: String, @Body addRecordRequest: PeopleRequests.MealAddRecordRequest) : Response<PeopleResponses.MealAddRecordResponse>
+    suspend fun doAddRecord(
+        @Header("Authorization") accessToken: String,
+        @Body addRecordRequest: PeopleRequests.PostMealRecord
+    ) : Response<PeopleResponses.PostMealRecord>
 }

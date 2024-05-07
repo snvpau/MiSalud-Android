@@ -1,10 +1,12 @@
-package com.healthtech.misalud.ui.screens.habits.meals.registry.ui
+package com.healthtech.misalud.ui.screens.habits.meals.registry
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,20 +18,28 @@ import com.healthtech.misalud.ui.components.InputField
 import com.healthtech.misalud.ui.components.RadialSelector
 import com.healthtech.misalud.ui.components.RoundedButton
 import com.healthtech.misalud.ui.components.SectionTitle
-import com.healthtech.misalud.ui.screens.habits.meals.registry.vm.MealRegistryViewModel
+import com.healthtech.misalud.core.viewModels.MealsViewModel
 
 @Composable
-fun MealRegistryScreen(viewModel: MealRegistryViewModel){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start
-    ){
-        Header()
-        Body(viewModel)
-        Footer(viewModel)
+fun MealRegistryScreen(viewModel: MealsViewModel){
+    val isLoading : Boolean by viewModel.isLoading.observeAsState(initial = false)
+
+    if(isLoading){
+        Box(Modifier.fillMaxSize()){
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Header()
+            Body(viewModel)
+            Footer(viewModel)
+        }
     }
 }
 
@@ -39,7 +49,7 @@ fun Header(){
 }
 
 @Composable
-fun Body(viewModel: MealRegistryViewModel){
+fun Body(viewModel: MealsViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
     val items = listOf("Desayuno", "Comida", "Cena", "Colación")
     val selectorState : String by viewModel.selectorState.observeAsState(items[0])
@@ -64,7 +74,7 @@ fun Body(viewModel: MealRegistryViewModel){
 }
 
 @Composable
-fun Footer(viewModel: MealRegistryViewModel){
+fun Footer(viewModel: MealsViewModel){
     RoundedButton(
         text = "Agregar Comida",
         onClick = { viewModel.addRecord() },
