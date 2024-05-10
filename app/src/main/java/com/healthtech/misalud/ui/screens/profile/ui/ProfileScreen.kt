@@ -17,11 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.healthtech.misalud.ui.screens.profile.vm.ProfileViewModel
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, globalNavController: NavController) {
+fun ProfileScreen(viewModel: ProfileViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +37,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, globalNavController: NavControlle
         Spacer(modifier = Modifier.padding(13.dp))
         Button(
             content = { Text(text = "Cerrar Sesion")},
-            onClick = {viewModel.logOut(globalNavController)},
+            onClick = {viewModel.logOut()},
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(44, 90, 168)
             )

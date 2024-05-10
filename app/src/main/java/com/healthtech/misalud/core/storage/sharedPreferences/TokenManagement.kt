@@ -5,37 +5,44 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class TokenManagement(context: Context) {
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
+object TokenManagement {
+    private const val ACCESS_TOKEN = "ACCESS_TOKEN"
+    private const val REFRESH_TOKEN = "REFRESH_TOKEN"
+    private const val IS_LOGGED_IN = "IS_LOGGED_IN"
 
-    private val prefs: SharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        "MiSaludAuth",
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    private var prefs: SharedPreferences? = null
 
-    fun saveAccessToken(token: String) {
-        prefs.edit().putString("accessToken", token).apply()
+    fun init(context: Context){
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        prefs = EncryptedSharedPreferences.create(
+            context,
+            "MiSaludAuth",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
     }
 
-    fun getAccessToken(): String? {
-        return prefs.getString("accessToken", null)
-    }
+    var accessToken: String?
+        get() = prefs?.getString(ACCESS_TOKEN, null)
+        set(value) {
+            prefs?.edit()?.apply {
+                putString(ACCESS_TOKEN, value).apply()
+                putBoolean(IS_LOGGED_IN, true)
+            }
+        }
 
-    fun saveRefreshToken(token: String) {
-        prefs.edit().putString("refreshToken", token).apply()
-    }
-
-    fun getRefreshToken(): String? {
-        return prefs.getString("refreshToken", null)
-    }
+    var refreshToken: String?
+        get() = prefs?.getString(REFRESH_TOKEN, null)
+        set(value) {
+            prefs?.edit()?.putString(REFRESH_TOKEN, value)?.apply()
+        }
 
     fun removeContents(){
-        prefs.edit().clear().apply()
+        prefs?.edit()?.clear()?.apply()
     }
 
 }

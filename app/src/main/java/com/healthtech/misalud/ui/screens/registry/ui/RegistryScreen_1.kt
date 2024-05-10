@@ -17,7 +17,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -39,22 +39,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.healthtech.misalud.R
 import com.healthtech.misalud.ui.screens.registry.vm.RegistryViewModel
 
 @Composable
-fun RegistryScreen_1(navigationController: NavHostController, viewModel: RegistryViewModel) {
+fun RegistryScreen_1(viewModel: RegistryViewModel) {
     Box(Modifier.fillMaxSize().padding(16.dp)) {
         Registry_1(
-            navigationController = navigationController,
             modifier = Modifier.align(Alignment.Center).fillMaxWidth(),
-            viewModel = viewModel)
+            viewModel = viewModel
+        )
     }
 }
 
 @Composable
-fun Registry_1(navigationController: NavHostController, modifier: Modifier, viewModel: RegistryViewModel){
+fun Registry_1(modifier: Modifier, viewModel: RegistryViewModel){
 
     val firstName : String by viewModel.firstName.observeAsState(initial = "")
     val lastName : String by viewModel.lastName.observeAsState(initial = "")
@@ -94,11 +93,11 @@ fun Registry_1(navigationController: NavHostController, modifier: Modifier, view
             textValue=confirmPassword,
             spaced=true
         ) { viewModel.onRegisterFormChanged(firstName, lastName, phoneNumber, password, it) }
-        RegisterButton(registerEnabled = registerEnabled, viewModel, navigationController)
+        RegisterButton(registerEnabled = registerEnabled, viewModel)
         AccountsDivider()
         LoginLegend(
-            navigationController = navigationController,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            viewModel = viewModel
         )
     }
 }
@@ -167,11 +166,11 @@ fun PasswordField(title: String, textValue: String, spaced: Boolean, onChange: (
 }
 
 @Composable
-fun RegisterButton(registerEnabled: Boolean, registryViewModel: RegistryViewModel, navigationController: NavHostController) {
+fun RegisterButton(registerEnabled: Boolean, registryViewModel: RegistryViewModel) {
     Spacer(modifier = Modifier.padding(10.dp))
     Button(
         enabled = registerEnabled,
-        onClick = { registryViewModel.onRegisterSelected(navigationController) },
+        onClick = { registryViewModel.onRegisterSelected() },
         modifier = Modifier.fillMaxWidth().height(48.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(44, 90, 168),
@@ -188,10 +187,11 @@ fun RegisterButton(registerEnabled: Boolean, registryViewModel: RegistryViewMode
 fun AccountsDivider() {
     Spacer(modifier = Modifier.padding(10.dp))
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
-        Divider(Modifier
-            .background(Color(0xFFF9F9F9))
-            .height(1.dp)
-            .weight(1f)
+        HorizontalDivider(
+            Modifier
+                .background(Color(0xFFF9F9F9))
+                .height(1.dp)
+                .weight(1f)
         )
         Text(text = "O",
             modifier = Modifier.padding(horizontal = 18.dp),
@@ -199,20 +199,21 @@ fun AccountsDivider() {
             fontWeight = FontWeight.Bold,
             color = Color(0xFFB5B5B5)
         )
-        Divider(Modifier
-            .background(Color(0xFFF9F9F9))
-            .height(1.dp)
-            .weight(1f)
+        HorizontalDivider(
+            Modifier
+                .background(Color(0xFFF9F9F9))
+                .height(1.dp)
+                .weight(1f)
         )
     }
 }
 
 @Composable
-fun LoginLegend(navigationController: NavHostController, modifier: Modifier){
+fun LoginLegend(modifier: Modifier, viewModel: RegistryViewModel){
     Spacer(modifier = Modifier.padding(10.dp))
     Text(
         text = "Inicia Sesión",
-        modifier = modifier.clickable { navigationController.navigate("LoginScreen")},
+        modifier = modifier.clickable { viewModel.navigate("LoginScreen")},
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
         color = Color(26, 152, 220)

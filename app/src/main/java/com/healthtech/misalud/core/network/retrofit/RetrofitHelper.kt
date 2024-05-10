@@ -1,5 +1,6 @@
 package com.healthtech.misalud.core.network.retrofit
 
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -14,7 +15,15 @@ object RetrofitHelper {
     fun getRetrofitPeople() : Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://192.168.100.76:5001/")
+            .client(createPeopleAuth())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    private fun createPeopleAuth(): OkHttpClient {
+        val okHttpClientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
+
+        okHttpClientBuilder.addInterceptor(PeopleInterceptor(this))
+        return okHttpClientBuilder.build()
     }
 }

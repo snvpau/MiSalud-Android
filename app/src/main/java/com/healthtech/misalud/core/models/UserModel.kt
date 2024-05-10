@@ -1,6 +1,6 @@
 package com.healthtech.misalud.core.models
 
-data class UserModel(
+data class UserModel (
     val id: Int,
     val uuid: String,
     val firstName: String,

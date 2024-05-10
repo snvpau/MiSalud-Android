@@ -1,6 +1,6 @@
 package com.healthtech.misalud.core.models
 
-data class RequestError(
+data class RequestError (
     val status: Int,
     val message: String
 )

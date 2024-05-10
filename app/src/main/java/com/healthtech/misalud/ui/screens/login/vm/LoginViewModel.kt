@@ -1,6 +1,5 @@
 package com.healthtech.misalud.ui.screens.login.vm
 
-import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -14,11 +13,10 @@ import com.healthtech.misalud.core.network.data.services.AuthService
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
 import kotlinx.coroutines.launch
 
-class LoginViewModel(context: Context) : ViewModel() {
+class LoginViewModel(navigationController: NavHostController) : ViewModel() {
 
     private val _authService = AuthService()
-    private val _tokenManager = TokenManagement(context)
-    private val _userManager = UserManagement(context)
+    private val _navigationController = navigationController
 
     private val _phoneNumber = MutableLiveData<String>()
     val phoneNumber : LiveData<String> = _phoneNumber
@@ -46,7 +44,7 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private fun isValidPassword(password: String): Boolean = password.length > 6
 
-    fun onLoginSelected(navigationController: NavHostController) {
+    fun onLoginSelected() {
         viewModelScope.launch {
             _isLoading.value = true
 
@@ -55,18 +53,18 @@ class LoginViewModel(context: Context) : ViewModel() {
                 Log.i("LoginViewModel", result.accessToken.toString())
                 Log.i("LoginViewModel", result.refreshToken.toString())
 
-                _tokenManager.saveAccessToken(result.accessToken.toString())
-                _tokenManager.saveRefreshToken(result.refreshToken.toString())
+                TokenManagement.accessToken = result.accessToken.toString()
+                TokenManagement.refreshToken = result.refreshToken.toString()
 
-                _userManager.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
+                UserManagement.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
 
                 Log.i("saveUUID", result.uuid.toString())
-                _userManager.saveUserAttributeString("uuid", result.uuid.toString())
+                UserManagement.saveUserAttributeString("uuid", result.uuid.toString())
 
                 Log.i("LoginViewModel", "Tokens Saved")
 
-                navigationController.navigate("HomeScreen"){
-                    popUpTo(navigationController.graph.findStartDestination().id){
+                _navigationController.navigate("HomeScreen"){
+                    popUpTo(_navigationController.graph.findStartDestination().id){
                         inclusive = true
                     }
                 }
@@ -77,10 +75,14 @@ class LoginViewModel(context: Context) : ViewModel() {
         }
     }
 
+    fun navigate(route: String) {
+        _navigationController.navigate(route)
+    }
+
     fun testToken(){
         viewModelScope.launch {
-            Log.i("Token Test", _tokenManager.getAccessToken().toString())
-            Log.i("Token Test", _tokenManager.getRefreshToken().toString())
+            TokenManagement.accessToken?.let { Log.i("Token Test", it) }
+            TokenManagement.refreshToken?.let { Log.i("Token Test", it) }
         }
     }
 

@@ -3,7 +3,7 @@ package com.healthtech.misalud.core.network.data.responses
 import com.healthtech.misalud.core.models.RequestError
 
 class AuthResponses {
-    data class LoginResponse(
+    data class PostLogin (
         val error: RequestError?,
         val success: Boolean?,
         val accessToken: String?,
@@ -11,8 +11,14 @@ class AuthResponses {
         val uuid: String?
     )
 
-    data class LogoutResponse (
+    data class PostLogout (
         val error: RequestError?,
         val success: Boolean?
+    )
+
+    data class PostRefreshAccessToken (
+        val error: RequestError?,
+        val success: Boolean?,
+        val accessToken: String?
     )
 }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 data class FilterItem(
-    val title: String,
+    var title: String,
     val action: () -> Unit,
     var selected: Boolean
 )

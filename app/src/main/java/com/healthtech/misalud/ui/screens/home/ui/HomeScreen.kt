@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -31,13 +32,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.healthtech.misalud.ui.components.ActionRow
 import com.healthtech.misalud.ui.components.SectionTitle
 import com.healthtech.misalud.ui.screens.home.vm.HomeViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navigationController: NavHostController) {
+fun HomeScreen(viewModel: HomeViewModel) {
+    LaunchedEffect(Unit) {
+        viewModel.getHomeDetails()
+    }
+
     val userName by viewModel.firstName.collectAsState()
     val isLoading : Boolean by viewModel.isLoading.observeAsState(initial = false)
 
@@ -65,7 +69,7 @@ fun HomeScreen(viewModel: HomeViewModel, navigationController: NavHostController
                 title = "Comida",
                 description = "Registre alimentos consumidos",
                 icon = Icons.Rounded.Fastfood,
-                onClickFunction = { viewModel.navigate(navigationController, "MealRegistry") }
+                onClickFunction = { viewModel.navigate("MealRegistry") }
             )
             ActionRow(title = "Ejercicio", description = "Registre ejercicio realizado", Icons.Rounded.FitnessCenter)
 
@@ -75,7 +79,7 @@ fun HomeScreen(viewModel: HomeViewModel, navigationController: NavHostController
                 title = "Comidas Registradas",
                 description = "0/3",
                 icon = Icons.Rounded.CheckCircleOutline,
-                onClickFunction = { viewModel.navigate(navigationController, "MealRecord") }
+                onClickFunction = { viewModel.navigate("MealRecord") }
             )
             ActionRow(title="Rutinas Realizadas", description="0/1", icon=Icons.Rounded.CheckCircleOutline)
         }

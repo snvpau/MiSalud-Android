@@ -18,7 +18,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -40,22 +40,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.healthtech.misalud.R
 import com.healthtech.misalud.ui.screens.login.vm.LoginViewModel
 
 @Composable
-fun LoginScreen(navigationController: NavHostController, viewModel: LoginViewModel) {
+fun LoginScreen(viewModel: LoginViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        Login(navigationController, Modifier.align(Alignment.Center), viewModel)
+        Login(Modifier.align(Alignment.Center), viewModel)
     }
 }
 
 @Composable
-fun Login(navigationController: NavHostController, modifier: Modifier, viewModel: LoginViewModel) {
+fun Login(modifier: Modifier, viewModel: LoginViewModel) {
 
     val phoneNumber : String by viewModel.phoneNumber.observeAsState(initial = "")
     val password : String by viewModel.password.observeAsState(initial = "")
@@ -81,12 +80,12 @@ fun Login(navigationController: NavHostController, modifier: Modifier, viewModel
             Spacer(modifier = Modifier.padding(6.dp))
             ErrorText(modifier = Modifier.align(Alignment.CenterHorizontally), errorText)
             Spacer(modifier = Modifier.padding(10.dp))
-            LoginButton(loginEnabled, viewModel, navigationController)
+            LoginButton(loginEnabled, viewModel)
             Spacer(modifier = Modifier.padding(10.dp))
             LoginDivider()
 
             Spacer(modifier = Modifier.padding(10.dp))
-            CreateAccount(navigationController = navigationController, modifier = Modifier.align(Alignment.CenterHorizontally))
+            CreateAccount(modifier = Modifier.align(Alignment.CenterHorizontally), viewModel = viewModel)
         }
     }
 }
@@ -162,10 +161,10 @@ fun ErrorText(modifier: Modifier, textError: String){
 }
 
 @Composable
-fun LoginButton(loginEnabled: Boolean, loginViewModel: LoginViewModel, navigationController: NavHostController) {
+fun LoginButton(loginEnabled: Boolean, loginViewModel: LoginViewModel) {
     Button(
         enabled = loginEnabled,
-        onClick = { loginViewModel.onLoginSelected(navigationController) },
+        onClick = { loginViewModel.onLoginSelected() },
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),
@@ -183,7 +182,7 @@ fun LoginButton(loginEnabled: Boolean, loginViewModel: LoginViewModel, navigatio
 @Composable
 fun LoginDivider() {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
-        Divider(
+        HorizontalDivider(
             Modifier
                 .background(Color(0xFFF9F9F9))
                 .height(1.dp)
@@ -195,7 +194,7 @@ fun LoginDivider() {
             fontWeight = FontWeight.Bold,
             color = Color(0xFFB5B5B5)
         )
-        Divider(
+        HorizontalDivider(
             Modifier
                 .background(Color(0xFFF9F9F9))
                 .height(1.dp)
@@ -205,10 +204,10 @@ fun LoginDivider() {
 }
 
 @Composable
-fun CreateAccount(navigationController: NavHostController, modifier: Modifier) {
+fun CreateAccount(modifier: Modifier, viewModel: LoginViewModel) {
     Text(
         text = "Crea una Cuenta",
-        modifier = modifier.clickable { navigationController.navigate("RegistryScreen_1")},
+        modifier = modifier.clickable { viewModel.navigate("RegistryScreen_1")},
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
         color = Color(26, 152, 220)

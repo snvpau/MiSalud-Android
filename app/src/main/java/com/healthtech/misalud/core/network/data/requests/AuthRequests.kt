@@ -1,7 +1,7 @@
 package com.healthtech.misalud.core.network.data.requests
 
 class AuthRequests{
-    data class PostLogin(
+    data class PostLogin (
         val phoneNumber: String,
         val password: String,
     )
@@ -15,5 +15,9 @@ class AuthRequests{
         val lastName: String,
         val phoneNumber: String,
         val password: String,
+    )
+
+    data class PostRefreshAccessToken (
+        val refreshToken: String
     )
 }

@@ -1,6 +1,6 @@
 package com.healthtech.misalud.ui.screens.home.vm
 
-import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +14,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(context: Context) : ViewModel() {
+class HomeViewModel(navigationController: NavHostController) : ViewModel() {
 
     private val _peopleService = PeopleService()
-    private val _tokenManager = TokenManagement(context)
-    private val _userManager = UserManagement(context)
+    private val _navigationController = navigationController
 
     private val _firstName = MutableStateFlow("")
     val firstName : StateFlow<String> = _firstName
@@ -29,28 +28,29 @@ class HomeViewModel(context: Context) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    init{
+    fun getHomeDetails() {
         viewModelScope.launch {
 
             _isLoading.value = true
 
-            val phoneNumber = _userManager.getUserAttributeString("phoneNumber")
-            val accessToken = _tokenManager.getAccessToken()
+            val phoneNumber = UserManagement.getUserAttributeString("phoneNumber")
+            val accessToken = TokenManagement.accessToken
 
             if(phoneNumber != null){
                 val result = async { _peopleService.doGetUser(phoneNumber=phoneNumber, accessToken = "Bearer " + accessToken!!) }
                 val infoDeffered = result.await()
 
                 if(infoDeffered.success){
+                    Log.i("asd","asd")
                     _firstName.value = infoDeffered.user.firstName
                 }
             }
-
+            Log.i("asd","asd")
             _isLoading.value = false
         }
     }
 
-    fun navigate(navigationController: NavHostController, route: String){
-        navigationController.navigate(route)
+    fun navigate(route: String){
+        _navigationController.navigate(route)
     }
 }

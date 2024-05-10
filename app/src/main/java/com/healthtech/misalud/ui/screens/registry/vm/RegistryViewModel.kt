@@ -1,6 +1,5 @@
 package com.healthtech.misalud.ui.screens.registry.vm
 
-import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -14,11 +13,10 @@ import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
 import kotlinx.coroutines.launch
 
-class RegistryViewModel(context: Context) : ViewModel(){
+class RegistryViewModel(navigationController: NavHostController) : ViewModel(){
 
     private val _authService = AuthService()
-    private val _tokenManager = TokenManagement(context)
-    private val _userManager = UserManagement(context)
+    private val _navigationController = navigationController
 
     private val _firstName = MutableLiveData<String>()
     val firstName : LiveData<String> = _firstName
@@ -58,7 +56,7 @@ class RegistryViewModel(context: Context) : ViewModel(){
     private fun isValidPhoneNumber(phoneNumber: String) : Boolean = Patterns.PHONE.matcher(phoneNumber).matches() && phoneNumber.length == 10
     private fun isValidPassword(password: String, confirmPassword: String) : Boolean = password.length > 6 && password == confirmPassword
 
-    fun onRegisterSelected(navigationController: NavHostController){
+    fun onRegisterSelected(){
         viewModelScope.launch {
             _isLoading.value = true
 
@@ -67,14 +65,14 @@ class RegistryViewModel(context: Context) : ViewModel(){
                 Log.i("RegistryViewModel", result.accessToken.toString())
                 Log.i("RegistryViewModel", result.refreshToken.toString())
 
-                _tokenManager.saveAccessToken(result.accessToken.toString())
-                _tokenManager.saveRefreshToken(result.refreshToken.toString())
+                TokenManagement.accessToken = result.accessToken.toString()
+                TokenManagement.refreshToken = result.refreshToken.toString()
 
-                _userManager.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
+                UserManagement.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
                 Log.i("LoginViewModel", "Tokens Saved")
 
-                navigationController.navigate("HomeScreen"){
-                    popUpTo(navigationController.graph.findStartDestination().id){
+                _navigationController.navigate("HomeScreen"){
+                    popUpTo(_navigationController.graph.findStartDestination().id){
                         inclusive = true
                     }
                 }
@@ -83,6 +81,10 @@ class RegistryViewModel(context: Context) : ViewModel(){
                 _isLoading.value = false
             }
         }
+    }
+
+    fun navigate(route: String) {
+        _navigationController.navigate(route)
     }
 
 }

@@ -53,6 +53,7 @@ fun Body(viewModel: MealsViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
     val items = listOf("Desayuno", "Comida", "Cena", "Colación")
     val selectorState : String by viewModel.selectorState.observeAsState(items[0])
+    viewModel.onSelectorChange(selectorState)
 
     InputField(
         placeholder = "Ingresa el Nombre del Alimento",

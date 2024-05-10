@@ -12,7 +12,7 @@ import org.json.JSONObject
 class AuthService {
     private val retrofit = RetrofitHelper.getRetrofitAuth()
 
-    suspend fun doLogin(phoneNumber: String, password: String) : AuthResponses.LoginResponse {
+    suspend fun doLogin(phoneNumber: String, password: String) : AuthResponses.PostLogin {
         val loginRequest = AuthRequests.PostLogin(phoneNumber, password)
 
         return withContext(Dispatchers.IO){
@@ -20,14 +20,14 @@ class AuthService {
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
-                return@withContext Gson().fromJson<AuthResponses.LoginResponse?>(jsonObject, AuthResponses.LoginResponse::class.java)
+                return@withContext Gson().fromJson<AuthResponses.PostLogin?>(jsonObject, AuthResponses.PostLogin::class.java)
             }
 
             return@withContext response.body()!!
         }
     }
 
-    suspend fun doLogout(refreshToken: String) : AuthResponses.LogoutResponse {
+    suspend fun doLogout(refreshToken: String) : AuthResponses.PostLogout {
         val logoutRequest = AuthRequests.PostLogout(refreshToken)
 
         return withContext(Dispatchers.IO){
@@ -35,14 +35,14 @@ class AuthService {
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
-                return@withContext Gson().fromJson<AuthResponses.LogoutResponse?>(jsonObject, AuthResponses.LogoutResponse::class.java)
+                return@withContext Gson().fromJson<AuthResponses.PostLogout?>(jsonObject, AuthResponses.PostLogout::class.java)
             }
 
             return@withContext response.body()!!
         }
     }
 
-    suspend fun doCreateAccount(firstName: String, lastName: String, phoneNumber: String, password: String) : AuthResponses.LoginResponse {
+    suspend fun doCreateAccount(firstName: String, lastName: String, phoneNumber: String, password: String) : AuthResponses.PostLogin {
         val registryRequest = AuthRequests.PostRegistry(firstName, lastName, phoneNumber, password)
 
         return withContext(Dispatchers.IO){
@@ -50,7 +50,7 @@ class AuthService {
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
-                return@withContext Gson().fromJson<AuthResponses.LoginResponse?>(jsonObject, AuthResponses.LoginResponse::class.java)
+                return@withContext Gson().fromJson<AuthResponses.PostLogin?>(jsonObject, AuthResponses.PostLogin::class.java)
             }
 
             return@withContext response.body()!!

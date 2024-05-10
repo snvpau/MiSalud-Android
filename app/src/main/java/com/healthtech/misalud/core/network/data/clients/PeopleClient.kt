@@ -10,7 +10,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface PeopleClient {
-
     @GET("/api/v1/people/user")
     suspend fun doGetUser(
         @Header("Authorization") accessToken: String,

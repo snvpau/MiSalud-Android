@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,16 +30,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        TokenManagement.init(this)
+        UserManagement.init(this)
+
         setContent {
             MiSaludTheme {
                 val navigationController  = rememberNavController()
+                val coroutineScope = rememberCoroutineScope()
 
-                val context = LocalContext.current
-
-                val tokenManager = TokenManagement(context)
-                val userManager = UserManagement(context)
-
-                val mealsViewModel = MealsViewModel(navigationController = navigationController, context = context)
+                val loginViewModel = LoginViewModel(navigationController = navigationController)
+                val registryViewModel = RegistryViewModel(navigationController = navigationController)
+                val homeViewModel = HomeViewModel(navigationController = navigationController)
+                val profileViewModel = ProfileViewModel(navigationController = navigationController)
+                val mealsViewModel = MealsViewModel(navigationController = navigationController)
 
                 val calendarState = rememberUseCaseState()
 
@@ -48,20 +51,20 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val refreshToken = tokenManager.getRefreshToken()
-                    val phoneNumber = userManager.getUserAttributeString("phoneNumber")
+                    val refreshToken = TokenManagement.refreshToken
+                    val phoneNumber = UserManagement.getUserAttributeString("phoneNumber")
 
                     val entryPoint : String = if(refreshToken == null && phoneNumber == null){
                         "LoginScreen"
                     } else {
-                        "LoginScreen"
+                        "HomeScreen"
                     }
 
                     NavHost(navController = navigationController, startDestination = entryPoint){
-                        composable("LoginScreen") { LoginScreen(navigationController, LoginViewModel(context)) }
-                        composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel(context)) }
-                        composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
-                        composable("MealRecord") { MealRecordScreen(mealsViewModel, calendarState) }
+                        composable("LoginScreen") { LoginScreen(loginViewModel) }
+                        composable("RegistryScreen_1") { RegistryScreen_1(registryViewModel) }
+                        composable("HomeScreen") { NavigationController(homeViewModel, profileViewModel) }
+                        composable("MealRecord") { MealRecordScreen(mealsViewModel, calendarState, coroutineScope) }
                         composable("MealRegistry") { MealRegistryScreen(mealsViewModel) }
                     }
                 }

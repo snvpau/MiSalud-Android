@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,12 +14,10 @@ import com.healthtech.misalud.ui.components.FilterItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class MealsViewModel(navigationController: NavHostController, context: Context): ViewModel() {
+class MealsViewModel(navigationController: NavHostController): ViewModel() {
 
     private val _peopleService = PeopleService()
     private val _navigationController = navigationController
-    private val _tokenManager = TokenManagement(context)
-    private val _userManager = UserManagement(context)
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -63,12 +60,16 @@ class MealsViewModel(navigationController: NavHostController, context: Context):
         getRecords(range)
     }
 
+    fun navigate(route: String) {
+        _navigationController.navigate(route)
+    }
+
     fun getRecords(range: String){
         viewModelScope.launch {
             _isLoading.value = true
 
-            val accessToken = "Bearer " + _tokenManager.getAccessToken()
-            val uuid = _userManager.getUserAttributeString("uuid")!!
+            val accessToken = "Bearer " + TokenManagement.accessToken
+            val uuid = UserManagement.getUserAttributeString("uuid")!!
 
             val result = async { _peopleService.doGetRecords(accessToken, uuid, range) }
             val infoDeffered = result.await()
@@ -88,8 +89,8 @@ class MealsViewModel(navigationController: NavHostController, context: Context):
             Log.i("StartFetch","StartFetch")
             _isLoading.value = true
 
-            val accessToken = "Bearer " + _tokenManager.getAccessToken()
-            val uuid = _userManager.getUserAttributeString("uuid")!!
+            val accessToken = "Bearer " + TokenManagement.accessToken
+            val uuid = UserManagement.getUserAttributeString("uuid")!!
 
             val result = async { _peopleService.doGetRecordDays(accessToken, uuid) }
             val infoDeffered = result.await()
@@ -109,8 +110,8 @@ class MealsViewModel(navigationController: NavHostController, context: Context):
         viewModelScope.launch {
             _isLoading.value = true
 
-            val accessToken = "Bearer " + _tokenManager.getAccessToken()
-            val uuid = _userManager.getUserAttributeString("uuid")!!
+            val accessToken = "Bearer " + TokenManagement.accessToken
+            val uuid = UserManagement.getUserAttributeString("uuid")!!
 
             val result = _peopleService.doAddRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, 1)
             if(result.success == true){
@@ -119,6 +120,7 @@ class MealsViewModel(navigationController: NavHostController, context: Context):
                 //_errorText.value = result.error?.message.toString()
                 Log.i("error", result.error?.message.toString())
             }
+
             _isLoading.value = false
         }
     }
