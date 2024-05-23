@@ -1,5 +1,6 @@
 package com.healthtech.misalud.core.network.data.services
 
+import android.util.Log
 import com.google.gson.Gson
 import com.healthtech.misalud.core.network.data.clients.PeopleClient
 import com.healthtech.misalud.core.network.data.requests.PeopleRequests
@@ -17,6 +18,8 @@ class PeopleService {
             val response = retrofit.create(PeopleClient::class.java).doGetUser(accessToken = accessToken, phoneNumber = phoneNumber)
 
             if(!response.isSuccessful) {
+                Log.i("PeopleService", response.raw().request().toString())
+                Log.i("PeopleService", response.errorBody()!!.charStream().readText())
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
                 return@withContext Gson().fromJson<PeopleResponses.GetUserData?>(jsonObject, PeopleResponses.GetUserData::class.java)
             }

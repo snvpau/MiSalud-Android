@@ -31,7 +31,6 @@ class PeopleInterceptor(private val retrofitHelper: RetrofitHelper): Interceptor
                 if(responseNewToken.code() == OK) {
                     responseNewToken.body()?.let {
                         TokenManagement.accessToken = it.accessToken
-
                     }
                 }
             }
@@ -43,11 +42,6 @@ class PeopleInterceptor(private val retrofitHelper: RetrofitHelper): Interceptor
     }
 
     private fun request(originalRequest: Request): Request {
-        return originalRequest.newBuilder()
-            .addHeader("Authorization", "Bearer ")
-            .addHeader("Accept", "application/json")
-            .build()
-
+        return originalRequest.newBuilder().build()
     }
-
 }

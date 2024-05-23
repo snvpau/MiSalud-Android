@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     val entryPoint : String = if(refreshToken == null && phoneNumber == null){
                         "LoginScreen"
                     } else {
-                        "HomeScreen"
+                        "LoginScreen"
                     }
 
                     NavHost(navController = navigationController, startDestination = entryPoint){
