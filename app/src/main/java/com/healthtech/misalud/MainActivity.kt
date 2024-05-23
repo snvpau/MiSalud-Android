@@ -6,51 +6,66 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.healthtech.misalud.components.home.ui.HomeViewModel
-import com.healthtech.misalud.components.login.ui.LoginScreen
-import com.healthtech.misalud.components.login.ui.LoginViewModel
-import com.healthtech.misalud.components.navcontroller.ui.NavigationController
-import com.healthtech.misalud.components.profile.ui.ProfileViewModel
-import com.healthtech.misalud.components.registry.ui.RegistryScreen_1
-import com.healthtech.misalud.components.registry.ui.RegistryViewModel
+import com.healthtech.misalud.ui.screens.home.vm.HomeViewModel
+import com.healthtech.misalud.ui.screens.login.ui.LoginScreen
+import com.healthtech.misalud.ui.screens.login.vm.LoginViewModel
+import com.healthtech.misalud.ui.screens.navigationcontroller.ui.NavigationController
+import com.healthtech.misalud.ui.screens.profile.vm.ProfileViewModel
+import com.healthtech.misalud.ui.screens.registry.ui.RegistryScreen_1
+import com.healthtech.misalud.ui.screens.registry.vm.RegistryViewModel
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
+import com.healthtech.misalud.ui.screens.habits.meals.records.MealRecordScreen
+import com.healthtech.misalud.ui.screens.habits.meals.registry.MealRegistryScreen
+import com.healthtech.misalud.core.viewModels.MealsViewModel
 import com.healthtech.misalud.ui.theme.MiSaludTheme
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        TokenManagement.init(this)
+        UserManagement.init(this)
+
         setContent {
             MiSaludTheme {
-                val context = LocalContext.current
+                val navigationController  = rememberNavController()
+                val coroutineScope = rememberCoroutineScope()
 
-                val tokenManager = TokenManagement(context)
-                val userManager = UserManagement(context)
+                val loginViewModel = LoginViewModel(navigationController = navigationController)
+                val registryViewModel = RegistryViewModel(navigationController = navigationController)
+                val homeViewModel = HomeViewModel(navigationController = navigationController)
+                val profileViewModel = ProfileViewModel(navigationController = navigationController)
+                val mealsViewModel = MealsViewModel(navigationController = navigationController)
+
+                val calendarState = rememberUseCaseState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navigationController  = rememberNavController()
-                    val refreshToken = tokenManager.getRefreshToken()
-                    val phoneNumber = userManager.getUserAttributeString("phoneNumebr")
+
+                    val refreshToken = TokenManagement.refreshToken
+                    val phoneNumber = UserManagement.getUserAttributeString("phoneNumber")
 
                     val entryPoint : String = if(refreshToken == null && phoneNumber == null){
                         "LoginScreen"
                     } else {
-                        "HomeScreen"
+                        "LoginScreen"
                     }
 
                     NavHost(navController = navigationController, startDestination = entryPoint){
-                        composable("LoginScreen") { LoginScreen(navigationController, LoginViewModel(context)) }
-                        composable("RegistryScreen_1") { RegistryScreen_1(navigationController, RegistryViewModel(context)) }
-                        composable("HomeScreen") { NavigationController(navigationController, HomeViewModel(context), ProfileViewModel(context)) }
+                        composable("LoginScreen") { LoginScreen(loginViewModel) }
+                        composable("RegistryScreen_1") { RegistryScreen_1(registryViewModel) }
+                        composable("HomeScreen") { NavigationController(homeViewModel, profileViewModel) }
+                        composable("MealRecord") { MealRecordScreen(mealsViewModel, calendarState, coroutineScope) }
+                        composable("MealRegistry") { MealRegistryScreen(mealsViewModel) }
                     }
                 }
             }
