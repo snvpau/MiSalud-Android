@@ -23,15 +23,28 @@ interface PeopleClient {
     ) : Response<PeopleResponses.GetRecordDays>
 
     @GET("/api/v1/people/meals")
-    suspend fun doGetRecords(
+    suspend fun doGetMealRecords(
         @Header("Authorization") accessToken: String,
         @Query("uuid") uuid: String,
         @Query("range") range: String
     ) : Response<PeopleResponses.GetMealRecords>
 
+    @GET("/api/v1/people/exercises")
+    suspend fun doGetExerciseRecords(
+        @Header("Authorization") accessToken: String,
+        @Query("uuid") uuid: String,
+        @Query("range") range: String
+    ) : Response<PeopleResponses.GetExerciseRecords>
+
     @POST("/api/v1/people/meals")
-    suspend fun doAddRecord(
+    suspend fun doAddMealRecord(
         @Header("Authorization") accessToken: String,
         @Body addRecordRequest: PeopleRequests.PostMealRecord
     ) : Response<PeopleResponses.PostMealRecord>
+
+    @POST("/api/v1/people/exercises")
+    suspend fun doAddExerciseRecord(
+        @Header("Authorization") accessToken: String,
+        @Body addRecordRequest: PeopleRequests.PostExerciseRecord
+    ) : Response<PeopleResponses.PostExerciseRecord>
 }

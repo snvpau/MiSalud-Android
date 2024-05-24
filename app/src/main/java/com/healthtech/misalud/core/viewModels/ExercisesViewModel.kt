@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.healthtech.misalud.core.models.MealRecord
+import com.healthtech.misalud.core.models.ExerciseRecord
 import com.healthtech.misalud.core.network.data.services.PeopleService
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
@@ -14,7 +14,7 @@ import com.healthtech.misalud.ui.components.FilterItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class MealsViewModel(navigationController: NavHostController): ViewModel() {
+class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
 
     private val _peopleService = PeopleService()
     private val _navigationController = navigationController
@@ -22,17 +22,17 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    //MealRecord
+    //ExerciseRecord
     private val _filterItemList = MutableLiveData<List<FilterItem>>()
     val filterItemList : LiveData<List<FilterItem>> = _filterItemList
 
-    private val _records = MutableLiveData<List<MealRecord>>()
-    val records: LiveData<List<MealRecord>> = _records
+    private val _records = MutableLiveData<List<ExerciseRecord>>()
+    val records: LiveData<List<ExerciseRecord>> = _records
 
     private val _allowedDays = MutableLiveData<List<String>>()
     val allowedDays: LiveData<List<String>> = _allowedDays
 
-    //MealRegistry
+    //ExerciseRegistry
 
     private val _name = MutableLiveData<String>()
     val name : LiveData<String> = _name
@@ -57,21 +57,21 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
             if (idx == index) item.copy(selected = true) else item.copy(selected = false)
         }
         _filterItemList.value = newList
-        getRecords(range)
+        getExerciseRecords(range)
     }
 
     fun navigate(route: String) {
         _navigationController.navigate(route)
     }
 
-    fun getRecords(range: String){
+    fun getExerciseRecords(range: String){
         viewModelScope.launch {
             _isLoading.value = true
 
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = async { _peopleService.doGetMealRecords(accessToken, uuid, range) }
+            val result = async { _peopleService.doGetExerciseRecords(accessToken, uuid, range) }
             val infoDeffered = result.await()
 
             if(infoDeffered.success){
@@ -113,9 +113,9 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = _peopleService.doAddMealRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, 1)
+            val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, 1)
             if(result.success == true){
-                _navigationController.navigate("MealRecord")
+                _navigationController.navigate("ExerciseRecord")
             } else {
                 //_errorText.value = result.error?.message.toString()
                 Log.i("error", result.error?.message.toString())
