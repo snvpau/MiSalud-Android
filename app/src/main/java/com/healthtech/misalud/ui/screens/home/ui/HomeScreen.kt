@@ -71,7 +71,15 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 icon = Icons.Rounded.Fastfood,
                 onClickFunction = { viewModel.navigate("MealRegistry") }
             )
-            ActionRow(title = "Ejercicio", description = "Registre ejercicio realizado", Icons.Rounded.FitnessCenter)
+
+            ActionRow(
+                title = "Ejercicio",
+                description = "Registre ejercicio realizado",
+                icon = Icons.Rounded.FitnessCenter,
+                onClickFunction = { viewModel.navigate("ExerciseRegistry") }
+            )
+
+
 
             SectionTitle("Resumen Diario", alignment = Alignment.Start)
 
@@ -81,7 +89,12 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 icon = Icons.Rounded.CheckCircleOutline,
                 onClickFunction = { viewModel.navigate("MealRecord") }
             )
-            ActionRow(title="Rutinas Realizadas", description="0/1", icon=Icons.Rounded.CheckCircleOutline)
+            ActionRow(
+                title="Rutinas Realizadas",
+                description="0/1",
+                icon=Icons.Rounded.CheckCircleOutline,
+                onClickFunction = { viewModel.navigate("ExerciseRecord") }
+            )
         }
     }
 }

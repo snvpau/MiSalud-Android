@@ -51,7 +51,7 @@ fun Header(){
 @Composable
 fun Body(viewModel: ExercisesViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
-    val items = listOf("Caminar", "Correr", "Levantamiento de pesas", "Natación")
+    val items = listOf("", "Satisfacción")
     val selectorState : String by viewModel.selectorState.observeAsState(items[0])
     viewModel.onSelectorChange(selectorState)
 

@@ -20,9 +20,12 @@ import com.healthtech.misalud.ui.screens.registry.ui.RegistryScreen_1
 import com.healthtech.misalud.ui.screens.registry.vm.RegistryViewModel
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
+import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.screens.habits.meals.records.MealRecordScreen
 import com.healthtech.misalud.ui.screens.habits.meals.registry.MealRegistryScreen
 import com.healthtech.misalud.core.viewModels.MealsViewModel
+import com.healthtech.misalud.ui.screens.habits.exercises.records.ExerciseRecordScreen
+import com.healthtech.misalud.ui.screens.habits.exercises.registry.ExerciseRegistryScreen
 import com.healthtech.misalud.ui.theme.MiSaludTheme
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 
@@ -43,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 val homeViewModel = HomeViewModel(navigationController = navigationController)
                 val profileViewModel = ProfileViewModel(navigationController = navigationController)
                 val mealsViewModel = MealsViewModel(navigationController = navigationController)
+                val exercisesViewModel = ExercisesViewModel(navigationController = navigationController)
 
                 val calendarState = rememberUseCaseState()
 
@@ -66,6 +70,8 @@ class MainActivity : ComponentActivity() {
                         composable("HomeScreen") { NavigationController(homeViewModel, profileViewModel) }
                         composable("MealRecord") { MealRecordScreen(mealsViewModel, calendarState, coroutineScope) }
                         composable("MealRegistry") { MealRegistryScreen(mealsViewModel) }
+                        composable("ExerciseRecord") { ExerciseRecordScreen(exercisesViewModel, calendarState, coroutineScope) }
+                        composable("ExerciseRegistry") { ExerciseRegistryScreen(exercisesViewModel) }
                     }
                 }
             }

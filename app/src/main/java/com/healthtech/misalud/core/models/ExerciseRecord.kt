@@ -8,4 +8,5 @@ data class ExerciseRecord (
     val createdAt: String,
     val updatedAt: String,
     val duration: Int, //Duracion min
+    val satisfaction: Int
 )
