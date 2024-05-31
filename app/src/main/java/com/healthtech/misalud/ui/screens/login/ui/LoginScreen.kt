@@ -124,7 +124,7 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         value = password,
         onValueChange = {onTextFieldChanged(it)},
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Contaseña") },
+        placeholder = { Text(text = "Contraseña") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         singleLine = true,

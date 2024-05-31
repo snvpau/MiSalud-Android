@@ -32,7 +32,7 @@ import com.healthtech.misalud.core.viewModels.MealsViewModel
 import com.healthtech.misalud.ui.components.DatePicker
 import com.healthtech.misalud.ui.components.FilterBar
 import com.healthtech.misalud.ui.components.FilterItem
-import com.healthtech.misalud.ui.components.InfoRow
+import com.healthtech.misalud.ui.components.InfoRowMeal
 import com.healthtech.misalud.ui.components.RoundedButton
 import com.healthtech.misalud.ui.components.WarningNoData
 import com.maxkeppeker.sheets.core.models.base.UseCaseState
@@ -137,7 +137,7 @@ fun Body(viewModel: MealsViewModel){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRow(title = record.type, description = record.name, icon = Icons.Rounded.AccessTime, endContent = {})
+            InfoRowMeal(title = record.type, description = record.name, score = record.score, icon = Icons.Rounded.AccessTime, endContent = {})
         }
     }
 

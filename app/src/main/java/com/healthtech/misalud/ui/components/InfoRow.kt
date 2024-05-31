@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InfoRow(title: String, description: String, icon: ImageVector, endContent: @Composable RowScope.() -> Unit){
+fun InfoRowMeal(title: String, description: String, score: Float, icon: ImageVector, endContent: @Composable RowScope.() -> Unit){
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
         Box(
             contentAlignment = Alignment.Center,
@@ -40,7 +40,35 @@ fun InfoRow(title: String, description: String, icon: ImageVector, endContent: @
         Column{
             Text(text = title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
             Text(text = description)
+            Text(text = "Score: $score")
         }
-        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth().padding(end = 16.dp), content = endContent)
+        Row(horizontalArrangement = Arrangement.End, modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 16.dp), content = endContent)
+    }
+}
+
+@Composable
+fun InfoRowMealExercise(title: String, duration: Int, score: Float, icon: ImageVector, endContent: @Composable RowScope.() -> Unit){
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .width(70.dp)
+                .height(70.dp)
+                .padding(8.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(241, 242, 246))
+        ){
+            Icon(icon, contentDescription = null)
+        }
+        Column{
+            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+            Text(text = "duration: $duration" )
+            Text(text = "Score: $score")
+        }
+        Row(horizontalArrangement = Arrangement.End, modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 16.dp), content = endContent)
     }
 }

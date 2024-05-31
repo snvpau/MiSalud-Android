@@ -1,12 +1,17 @@
 package com.healthtech.misalud.ui.screens.habits.meals.registry
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +57,7 @@ fun Header(){
 fun Body(viewModel: MealsViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
     val items = listOf("Desayuno", "Comida", "Cena", "Colación")
+    val score : Float by viewModel.score.observeAsState(initial = 0f)
     val selectorState : String by viewModel.selectorState.observeAsState(items[0])
     viewModel.onSelectorChange(selectorState)
 
@@ -72,6 +78,25 @@ fun Body(viewModel: MealsViewModel){
         paddingTop = 6,
         paddingItem = 6
     )
+
+    Spacer(modifier = Modifier.padding(10.dp))
+
+    Text(text = "Calificacion del Alimento")
+    Slider(
+        value = score,
+        onValueChange = { viewModel.onScoreChange(it) },
+        valueRange = 0f..2f,
+        steps = 1,
+        modifier = Modifier.fillMaxWidth()
+    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Text(text = "Malo")
+        Text(text = "Regular")
+        Text(text = "Bueno")
+    }
 }
 
 @Composable

@@ -4,9 +4,8 @@ data class ExerciseRecord (
     val id: Int,
     val uuid: String,
     val name: String,
-    val type: String,
-    val createdAt: String,
-    val updatedAt: String,
     val duration: Int, //Duracion min
-    val satisfaction: Int
+    val score: Float,
+    val createdAt: String,
+    val updatedAt: String
 )

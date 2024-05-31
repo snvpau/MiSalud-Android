@@ -1,12 +1,16 @@
 package com.healthtech.misalud.ui.screens.habits.exercises.registry
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +20,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.components.InputField
-import com.healthtech.misalud.ui.components.RadialSelector
+import androidx.compose.material3.Slider
 import com.healthtech.misalud.ui.components.RoundedButton
 import com.healthtech.misalud.ui.components.SectionTitle
 
@@ -51,9 +55,9 @@ fun Header(){
 @Composable
 fun Body(viewModel: ExercisesViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
-    val items = listOf("", "Satisfacción")
-    val selectorState : String by viewModel.selectorState.observeAsState(items[0])
-    viewModel.onSelectorChange(selectorState)
+    val duration : Int by viewModel.duration.observeAsState(initial = 0)
+    val score : Float by viewModel.score.observeAsState(initial = 1f)
+
 
     InputField(
         placeholder = "Ingresa el nombre del Ejercicio",
@@ -65,14 +69,34 @@ fun Body(viewModel: ExercisesViewModel){
 
     Spacer(modifier = Modifier.padding(10.dp))
 
-    RadialSelector(
-        items = items,
-        selector = selectorState,
-        onChange = { viewModel.onSelectorChange(it) },
-        paddingTop = 6,
-        paddingItem = 6
+    InputField(
+        placeholder = "Ingresa la duracion del ejercicio",
+        onChange = { viewModel.onDurationChange(it.toInt()) },
+        textValueInt = duration,
+        spaced = true,
+        padding = 15
     )
+
+    Spacer(modifier = Modifier.padding(10.dp))
+
+    Text(text = "Calificacion del Ejercicio")
+    Slider(
+        value = score,
+        onValueChange = { viewModel.onScoreChange(it) },
+        valueRange = 0f..2f,
+        steps = 1,
+        modifier = Modifier.fillMaxWidth()
+    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Text(text = "Malo")
+        Text(text = "Regular")
+        Text(text = "Bueno")
+    }
 }
+
 
 @Composable
 fun Footer(viewModel: ExercisesViewModel){

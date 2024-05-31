@@ -5,6 +5,7 @@ data class MealRecord (
     val uuid: String,
     val name: String,
     val type: String,
+    val score: Float,
     val createdAt: String,
     val updatedAt: String,
 )

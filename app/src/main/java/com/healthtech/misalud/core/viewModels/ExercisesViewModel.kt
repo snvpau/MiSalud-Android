@@ -37,15 +37,22 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
     private val _name = MutableLiveData<String>()
     val name : LiveData<String> = _name
 
-    private val _selectorState = MutableLiveData<String>()
-    val selectorState: LiveData<String> = _selectorState
+    private val _duration = MutableLiveData<Int>()
+    val duration : LiveData<Int> = _duration
+
+    private val _score = MutableLiveData<Float>()
+    val score : LiveData<Float> = _score
 
     fun onNameChange(text: String){
         _name.value = text
     }
 
-    fun onSelectorChange(state: String){
-        _selectorState.value = state
+    fun onDurationChange(num: Int){
+        _duration.value = num
+    }
+
+    fun onScoreChange(num: Float){
+        _score.value = num
     }
 
     fun setFilterItems(list: List<FilterItem>){
@@ -113,7 +120,7 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, 1)
+            val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _duration.value!!, _score.value!!)
             if(result.success == true){
                 _navigationController.navigate("ExerciseRecord")
             } else {

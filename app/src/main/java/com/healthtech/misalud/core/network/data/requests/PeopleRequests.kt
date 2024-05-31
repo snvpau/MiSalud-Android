@@ -5,12 +5,12 @@ class PeopleRequests {
         val uuid: String,
         val name: String,
         val type: String,
-        val score: Int
+        val score: Float
     )
     data class PostExerciseRecord (
         val uuid: String,
         val name: String,
-        val type: String,
-        val score: Int
+        val duration: Int,
+        val score: Float
     )
 }

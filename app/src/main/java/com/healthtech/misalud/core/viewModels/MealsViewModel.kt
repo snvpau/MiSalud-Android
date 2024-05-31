@@ -40,12 +40,19 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
     private val _selectorState = MutableLiveData<String>()
     val selectorState: LiveData<String> = _selectorState
 
+    private val _score = MutableLiveData<Float>()
+    val score: LiveData<Float> = _score
+
     fun onNameChange(text: String){
         _name.value = text
     }
 
     fun onSelectorChange(state: String){
         _selectorState.value = state
+    }
+
+    fun onScoreChange(text: Float){
+        _score.value = text
     }
 
     fun setFilterItems(list: List<FilterItem>){
@@ -113,7 +120,7 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = _peopleService.doAddMealRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, 1)
+            val result = _peopleService.doAddMealRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, _score.value!!)
             if(result.success == true){
                 _navigationController.navigate("MealRecord")
             } else {

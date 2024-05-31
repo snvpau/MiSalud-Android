@@ -62,7 +62,7 @@ class PeopleService {
             return@withContext response.body()!!
         }
     }
-    suspend fun doAddMealRecord(accessToken: String, uuid: String, name: String, type: String, score: Int) : PeopleResponses.PostMealRecord {
+    suspend fun doAddMealRecord(accessToken: String, uuid: String, name: String, type: String, score: Float) : PeopleResponses.PostMealRecord {
         val mealRequest = PeopleRequests.PostMealRecord(uuid, name, type, score)
 
         return withContext(Dispatchers.IO){
@@ -76,8 +76,8 @@ class PeopleService {
             return@withContext response.body()!!
         }
     }
-    suspend fun doAddExerciseRecord(accessToken: String, uuid: String, name: String, type: String, score: Int) : PeopleResponses.PostExerciseRecord {
-        val exerciseRequest = PeopleRequests.PostExerciseRecord(uuid, name, type, score)
+    suspend fun doAddExerciseRecord(accessToken: String, uuid: String, name: String, duration: Int, score: Float) : PeopleResponses.PostExerciseRecord {
+        val exerciseRequest = PeopleRequests.PostExerciseRecord(uuid, name, duration, score)
 
         return withContext(Dispatchers.IO){
             val response = retrofit.create(PeopleClient::class.java).doAddExerciseRecord(accessToken, exerciseRequest)
