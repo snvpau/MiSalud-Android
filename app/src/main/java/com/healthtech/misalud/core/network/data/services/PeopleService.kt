@@ -1,5 +1,6 @@
 package com.healthtech.misalud.core.network.data.services
 
+import android.util.Log
 import com.google.gson.Gson
 import com.healthtech.misalud.core.network.data.clients.PeopleClient
 import com.healthtech.misalud.core.network.data.requests.PeopleRequests
@@ -78,6 +79,8 @@ class PeopleService {
     }
     suspend fun doAddExerciseRecord(accessToken: String, uuid: String, name: String, duration: Int, score: Float) : PeopleResponses.PostExerciseRecord {
         val exerciseRequest = PeopleRequests.PostExerciseRecord(uuid, name, duration, score)
+
+        Log.i("Test", exerciseRequest.toString())
 
         return withContext(Dispatchers.IO){
             val response = retrofit.create(PeopleClient::class.java).doAddExerciseRecord(accessToken, exerciseRequest)

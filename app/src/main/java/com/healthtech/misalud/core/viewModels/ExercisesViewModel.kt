@@ -1,6 +1,7 @@
 package com.healthtech.misalud.core.viewModels
 
 import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,8 +38,8 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
     private val _name = MutableLiveData<String>()
     val name : LiveData<String> = _name
 
-    private val _duration = MutableLiveData<Int>()
-    val duration : LiveData<Int> = _duration
+    private val _duration = MutableLiveData<String>()
+    val duration : LiveData<String> = _duration
 
     private val _score = MutableLiveData<Float>()
     val score : LiveData<Float> = _score
@@ -47,8 +48,8 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
         _name.value = text
     }
 
-    fun onDurationChange(num: Int){
-        _duration.value = num
+    fun onDurationChange(text: String){
+        _duration.value = text
     }
 
     fun onScoreChange(num: Float){
@@ -120,7 +121,7 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _duration.value!!, _score.value!!)
+            val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _duration.value?.toIntOrNull()!!, _score.value!!)
             if(result.success == true){
                 _navigationController.navigate("ExerciseRecord")
             } else {

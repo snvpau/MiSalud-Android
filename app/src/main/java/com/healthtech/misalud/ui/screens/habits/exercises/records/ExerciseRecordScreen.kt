@@ -34,7 +34,7 @@ import com.healthtech.misalud.core.viewModels.MealsViewModel
 import com.healthtech.misalud.ui.components.DatePicker
 import com.healthtech.misalud.ui.components.FilterBar
 import com.healthtech.misalud.ui.components.FilterItem
-import com.healthtech.misalud.ui.components.InfoRowMealExercise
+import com.healthtech.misalud.ui.components.InfoRow
 import com.healthtech.misalud.ui.components.RoundedButton
 import com.healthtech.misalud.ui.components.WarningNoData
 import com.maxkeppeker.sheets.core.models.base.UseCaseState
@@ -139,7 +139,7 @@ fun Body(viewModel: ExercisesViewModel){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRowMealExercise(title = record.name, duration = record.duration, score = record.score, icon = Icons.Rounded.AccessTime, endContent = {})
+            InfoRow(title = record.name, description = "Duración" + record.duration.toString(), score = record.score, icon = Icons.Rounded.AccessTime, endContent = {})
         }
     }
 

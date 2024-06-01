@@ -18,9 +18,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun InputField(
     placeholder: String,
-    //textValue: String,
-    textValue: String? = null,
-    textValueInt: Int? = null,
+    textValue: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     spaced: Boolean = false,
     padding: Int = 4,
@@ -31,10 +29,8 @@ fun InputField(
         Spacer(modifier = Modifier.padding(padding.dp))
     }
 
-    val displayValue = textValue ?: textValueInt?.toString() ?: ""
-
     TextField(
-        value = displayValue,
+        value = textValue,
         onValueChange = onChange,
         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)),
         placeholder = { Text(text = placeholder) },

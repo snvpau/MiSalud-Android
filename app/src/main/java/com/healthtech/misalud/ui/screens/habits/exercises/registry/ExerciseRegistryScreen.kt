@@ -55,9 +55,10 @@ fun Header(){
 @Composable
 fun Body(viewModel: ExercisesViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
-    val duration : Int by viewModel.duration.observeAsState(initial = 0)
+    val duration : String by viewModel.duration.observeAsState(initial = "")
     val score : Float by viewModel.score.observeAsState(initial = 1f)
 
+    viewModel.onScoreChange(score)
 
     InputField(
         placeholder = "Ingresa el nombre del Ejercicio",
@@ -67,17 +68,13 @@ fun Body(viewModel: ExercisesViewModel){
         padding = 15
     )
 
-    Spacer(modifier = Modifier.padding(10.dp))
-
     InputField(
         placeholder = "Ingresa la duracion del ejercicio",
-        onChange = { viewModel.onDurationChange(it.toInt()) },
-        textValueInt = duration,
+        onChange = { viewModel.onDurationChange(it) },
+        textValue = duration,
         spaced = true,
         padding = 15
     )
-
-    Spacer(modifier = Modifier.padding(10.dp))
 
     Text(text = "Calificacion del Ejercicio")
     Slider(
