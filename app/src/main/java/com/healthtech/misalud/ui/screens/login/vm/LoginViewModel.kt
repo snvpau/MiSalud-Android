@@ -49,7 +49,7 @@ class LoginViewModel(navigationController: NavHostController) : ViewModel() {
             _isLoading.value = true
 
             val result = _authService.doLogin(phoneNumber.value!!, password.value!!)
-            if(result.success == true){
+            if(result.success == true) {
                 Log.i("LoginViewModel", result.accessToken.toString())
                 Log.i("LoginViewModel", result.refreshToken.toString())
 

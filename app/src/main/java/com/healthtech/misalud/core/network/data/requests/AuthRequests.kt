@@ -20,4 +20,10 @@ class AuthRequests{
     data class PostRefreshAccessToken (
         val refreshToken: String
     )
+
+    data class PostChangePassword(
+        val uuid: String,
+        val currentPassword: String,
+        val newPassword: String
+    )
 }
