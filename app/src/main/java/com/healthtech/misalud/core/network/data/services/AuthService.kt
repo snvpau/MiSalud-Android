@@ -5,6 +5,7 @@ import com.healthtech.misalud.core.network.retrofit.RetrofitHelper
 import com.healthtech.misalud.core.network.data.clients.AuthClient
 import com.healthtech.misalud.core.network.data.requests.AuthRequests
 import com.healthtech.misalud.core.network.data.responses.AuthResponses
+import retrofit2.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -56,4 +57,15 @@ class AuthService {
             return@withContext response.body()!!
         }
     }
+
+    object RetrofitInstance {
+        val api: AuthClient by lazy {
+            RetrofitHelper.getRetrofitAuth().create(AuthClient::class.java)
+        }
+    }
+    suspend fun changePassword(uuid: String, currentPassword: String, newPassword: String): Response<AuthResponses.PostChangePassword> {
+        val request = AuthRequests.PostChangePassword(uuid, currentPassword, newPassword)
+        return RetrofitInstance.api.doChangePassword(request)
+    }
+
 }

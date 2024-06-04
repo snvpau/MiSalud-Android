@@ -16,9 +16,46 @@ class ProfileViewModel(navigationController: NavHostController) : ViewModel() {
 
     private val _authService = AuthService()
     private val _navigationController = navigationController
+    private val _errorText = MutableLiveData<String>()
+    val errorText: LiveData<String> get() = _errorText
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading : LiveData<Boolean> = _isLoading
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _name = MutableLiveData<String>()
+    val name: LiveData<String> = _name
+
+    private val _phoneNumber = MutableLiveData<String>()
+    val phoneNumber: LiveData<String> = _phoneNumber
+
+    private val _password = MutableLiveData<String>("******** Change")
+    val password: LiveData<String> = _password
+
+    init {
+        loadUserData()
+    }
+
+    private fun loadUserData() {
+        _name.value = UserManagement.getUserAttributeString("firstName") ?: "N/A"
+        _phoneNumber.value = UserManagement.getUserAttributeString("phoneNumber") ?: "N/A"
+    }
+
+    fun changePassword(uuid: String, currentPassword: String, newPassword: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = _authService.changePassword(uuid, currentPassword, newPassword)
+                if (response.isSuccessful && response.body()?.success == true) {
+                } else {
+                    _errorText.value = response.body()?.error?.message ?: "Error changing password"
+                }
+            } catch (e: Exception) {
+                _errorText.value = e.message ?: "An error occurred"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
     fun logOut(){
 

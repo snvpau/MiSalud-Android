@@ -43,6 +43,7 @@ class HomeViewModel(navigationController: NavHostController) : ViewModel() {
                 if(infoDeffered.success){
                     Log.i("asd","asd")
                     _firstName.value = infoDeffered.user.firstName
+                    UserManagement.saveUserAttributeString(key = "firstName", infoDeffered.user.firstName)
                 }
             }
             Log.i("asd","asd")
