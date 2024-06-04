@@ -139,7 +139,7 @@ fun Body(viewModel: ExercisesViewModel){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRow(title = record.name, description = "Duración" + record.duration.toString(), score = record.score, icon = Icons.Rounded.AccessTime, endContent = {})
+            InfoRow(title = record.name, description = "Duración: " + record.duration.toString() + " min", score = record.score, icon = Icons.Rounded.AccessTime, endContent = {})
         }
     }
 

@@ -69,7 +69,7 @@ fun Body(viewModel: ExercisesViewModel){
     )
 
     InputField(
-        placeholder = "Ingresa la duracion del ejercicio",
+        placeholder = "Ingresa la duracion del ejercicio en minutos",
         onChange = { viewModel.onDurationChange(it) },
         textValue = duration,
         spaced = true,
