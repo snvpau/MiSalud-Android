@@ -1,4 +1,4 @@
-package com.healthtech.misalud.ui.screens.registry.vm
+package com.healthtech.misalud.core.viewModels
 
 import android.util.Log
 import android.util.Patterns
@@ -7,16 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
+import com.healthtech.misalud.core.navigation.Navigation
 import com.healthtech.misalud.core.network.data.services.AuthService
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
 import kotlinx.coroutines.launch
 
-class RegistryViewModel(navigationController: NavHostController) : ViewModel(){
+class RegistryViewModel : ViewModel(){
 
     private val _authService = AuthService()
-    private val _navigationController = navigationController
 
     private val _firstName = MutableLiveData<String>()
     val firstName : LiveData<String> = _firstName
@@ -71,8 +70,8 @@ class RegistryViewModel(navigationController: NavHostController) : ViewModel(){
                 UserManagement.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
                 Log.i("LoginViewModel", "Tokens Saved")
 
-                _navigationController.navigate("HomeScreen"){
-                    popUpTo(_navigationController.graph.findStartDestination().id){
+                Navigation.controller!!.navigate("HomeScreen"){
+                    popUpTo(Navigation.controller!!.graph.findStartDestination().id){
                         inclusive = true
                     }
                 }
@@ -84,7 +83,7 @@ class RegistryViewModel(navigationController: NavHostController) : ViewModel(){
     }
 
     fun navigate(route: String) {
-        _navigationController.navigate(route)
+        Navigation.controller!!.navigate(route)
     }
 
 }

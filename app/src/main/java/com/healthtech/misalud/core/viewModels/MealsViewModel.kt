@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.healthtech.misalud.core.models.MealRecord
+import com.healthtech.misalud.core.navigation.Navigation
 import com.healthtech.misalud.core.network.data.services.PeopleService
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
@@ -14,10 +14,9 @@ import com.healthtech.misalud.ui.components.FilterItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class MealsViewModel(navigationController: NavHostController): ViewModel() {
+class MealsViewModel: ViewModel() {
 
     private val _peopleService = PeopleService()
-    private val _navigationController = navigationController
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -68,7 +67,7 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
     }
 
     fun navigate(route: String) {
-        _navigationController.navigate(route)
+        Navigation.controller!!.navigate(route)
     }
 
     fun getRecords(range: String){
@@ -122,7 +121,7 @@ class MealsViewModel(navigationController: NavHostController): ViewModel() {
 
             val result = _peopleService.doAddMealRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, _score.value!!)
             if(result.success == true){
-                _navigationController.navigate("MealRecord")
+                Navigation.controller!!.navigate("MealRecord")
             } else {
                 //_errorText.value = result.error?.message.toString()
                 Log.i("error", result.error?.message.toString())

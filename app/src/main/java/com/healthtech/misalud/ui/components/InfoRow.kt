@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InfoRow(title: String, description: String, score: Float = 0f, icon: ImageVector, endContent: @Composable RowScope.() -> Unit){
+fun InfoRow(title: String, description: String, score: Float = 0f, icon: ImageVector? = null, endContent: @Composable RowScope.() -> Unit){
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
         Box(
             contentAlignment = Alignment.Center,
@@ -35,7 +35,9 @@ fun InfoRow(title: String, description: String, score: Float = 0f, icon: ImageVe
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color(241, 242, 246))
         ){
-            Icon(icon, contentDescription = null)
+            if(icon != null){
+                Icon(icon, contentDescription = null)
+            }
         }
         Column{
             Text(text = title, fontWeight = FontWeight.Bold, fontSize = 17.sp)

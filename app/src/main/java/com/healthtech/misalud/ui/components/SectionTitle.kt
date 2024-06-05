@@ -26,5 +26,4 @@ fun SectionTitle(title: String, spacing: Int = 0, fontSize: Int = 18, alignment:
             modifier = Modifier.padding(8.dp),
         )
     }
-
 }

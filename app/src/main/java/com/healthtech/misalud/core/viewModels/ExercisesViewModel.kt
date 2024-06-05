@@ -1,13 +1,12 @@
 package com.healthtech.misalud.core.viewModels
 
 import android.util.Log
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.healthtech.misalud.core.models.ExerciseRecord
+import com.healthtech.misalud.core.navigation.Navigation
 import com.healthtech.misalud.core.network.data.services.PeopleService
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
@@ -15,10 +14,9 @@ import com.healthtech.misalud.ui.components.FilterItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
+class ExercisesViewModel: ViewModel() {
 
     private val _peopleService = PeopleService()
-    private val _navigationController = navigationController
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -69,7 +67,7 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
     }
 
     fun navigate(route: String) {
-        _navigationController.navigate(route)
+        Navigation.controller!!.navigate(route)
     }
 
     fun getExerciseRecords(range: String){
@@ -123,7 +121,10 @@ class ExercisesViewModel(navigationController: NavHostController): ViewModel() {
 
             val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _duration.value?.toIntOrNull()!!, _score.value!!)
             if(result.success == true){
-                _navigationController.navigate("ExerciseRecord")
+                _name.value = ""
+                _duration.value = ""
+                _score.value = 1f
+                Navigation.controller!!.navigate("ExerciseRecord")
             } else {
                 //_errorText.value = result.error?.message.toString()
                 Log.i("error", result.error?.message.toString())

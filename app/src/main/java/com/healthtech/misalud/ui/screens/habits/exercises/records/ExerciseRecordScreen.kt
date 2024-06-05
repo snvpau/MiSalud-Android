@@ -1,6 +1,5 @@
 package com.healthtech.misalud.ui.screens.habits.exercises.records
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,28 +8,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.AccessTime
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.healthtech.misalud.core.models.ExerciseRecord
 import com.healthtech.misalud.core.viewModels.ExercisesViewModel
-import com.healthtech.misalud.core.viewModels.MealsViewModel
+import com.healthtech.misalud.ui.components.CustomScaffold
 import com.healthtech.misalud.ui.components.DatePicker
 import com.healthtech.misalud.ui.components.FilterBar
 import com.healthtech.misalud.ui.components.FilterItem
@@ -41,38 +30,16 @@ import com.maxkeppeker.sheets.core.models.base.UseCaseState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseRecordScreen(viewModel: ExercisesViewModel, calendarState: UseCaseState, coroutineScope: CoroutineScope){
-
     LaunchedEffect(Unit) {
         viewModel.getExerciseRecords("today")
     }
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = {viewModel.navigate("HomeScreen")}) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
-                        )
-                    }
-                },
-                title = {
-                    Text(
-                        text = "Ejercicios",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                },
-            )
-        },
-        content = {
-            ScreenContents(viewModel, calendarState, it, coroutineScope)
-        }
+    CustomScaffold(
+        title = "Ejercicios",
+        returnRoute = "HomeScreen",
+        content = { ScreenContents(viewModel, calendarState, it, coroutineScope) }
     )
 }
 
@@ -87,19 +54,14 @@ fun ScreenContents(viewModel: ExercisesViewModel, calendarState: UseCaseState, p
     }
 
     fun showCalendar() {
-        Log.i("Test","SHOW")
         coroutineScope.launch {
             viewModel.getRecordDays()
             calendarState.show()
-            Log.i("Test","SHOW")
         }
     }
 
     if(isLoading){
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding()){
+        Box(Modifier.fillMaxSize().padding()){
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     } else {
@@ -107,7 +69,7 @@ fun ScreenContents(viewModel: ExercisesViewModel, calendarState: UseCaseState, p
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
+                .padding(start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Header(viewModel, paddingValues) { showCalendar() }
@@ -139,7 +101,7 @@ fun Body(viewModel: ExercisesViewModel){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRow(title = record.name, description = "Duración: " + record.duration.toString() + " min", score = record.score, icon = Icons.Rounded.AccessTime, endContent = {})
+            InfoRow(title = record.name, description = "Duración: " + record.duration.toString() + " min", score = record.score, icon = Icons.Rounded.AccessTime) {}
         }
     }
 
@@ -148,5 +110,5 @@ fun Body(viewModel: ExercisesViewModel){
 
 @Composable
 fun Footer(viewModel: ExercisesViewModel){
-    RoundedButton(text = "Agregar ejercicio", fullWidth = true, bold = true, onClick = {viewModel.navigate("ExerciseRegistry")})
+    RoundedButton(text = "Agregar Ejercicio", fullWidth = true, bold = true, onClick = {viewModel.navigate("ExerciseRegistry")})
 }

@@ -1,4 +1,4 @@
-package com.healthtech.misalud.ui.screens.home.ui
+package com.healthtech.misalud.ui.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,15 +9,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material.icons.rounded.Fastfood
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,15 +27,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.healthtech.misalud.core.navigation.Navigation
 import com.healthtech.misalud.ui.components.ActionRow
+import com.healthtech.misalud.ui.components.InfoCard
 import com.healthtech.misalud.ui.components.SectionTitle
-import com.healthtech.misalud.ui.screens.home.vm.HomeViewModel
+import com.healthtech.misalud.core.viewModels.HomeViewModel
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
@@ -45,10 +46,10 @@ fun HomeScreen(viewModel: HomeViewModel) {
     val userName by viewModel.firstName.collectAsState()
     val isLoading : Boolean by viewModel.isLoading.observeAsState(initial = false)
 
-    val c1 = "0"
-    val c2 = "0h"
-    val c3 = "0"
-    val c4 = "0"
+    val score : String by viewModel.score.observeAsState(initial = "")
+    val activeTime : String by viewModel.activeTime.observeAsState(initial = "")
+    val meals : String by viewModel.meals.observeAsState(initial = "")
+    val exercises : String by viewModel.exercises.observeAsState(initial = "")
 
     if(isLoading){
         Box(Modifier.fillMaxSize()){
@@ -62,8 +63,8 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start,
         ) {
-            GreetingText(userName)
-            HeaderGrid(c1, c2, c3, c4)
+            Header(userName)
+            HeaderGrid(score, activeTime, meals, exercises)
             SectionTitle("Añade una Comida o Entrenamiento", alignment = Alignment.Start)
             ActionRow(
                 title = "Comida",
@@ -71,7 +72,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 icon = Icons.Rounded.Fastfood,
                 onClickFunction = { viewModel.navigate("MealRegistry") }
             )
-
             ActionRow(
                 title = "Ejercicio",
                 description = "Registre ejercicio realizado",
@@ -79,62 +79,34 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 onClickFunction = { viewModel.navigate("ExerciseRegistry") }
             )
 
-
-
             SectionTitle("Resumen Diario", alignment = Alignment.Start)
 
             ActionRow(
                 title = "Comidas Registradas",
-                description = "0/3",
+                description = "$meals/3",
                 icon = Icons.Rounded.CheckCircleOutline,
                 onClickFunction = { viewModel.navigate("MealRecord") }
             )
             ActionRow(
-                title="Rutinas Realizadas",
-                description="0/1",
-                icon=Icons.Rounded.CheckCircleOutline,
+                title = "Rutinas Realizadas",
+                description = "$exercises/1",
+                icon = Icons.Rounded.CheckCircleOutline,
                 onClickFunction = { viewModel.navigate("ExerciseRecord") }
             )
         }
     }
 }
-@Composable
-fun HeaderBox(title: String, content: String){
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .width(180.dp)
-            .height(120.dp)
-            .padding(8.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(241, 242, 246))
-    ) {
-        Column( modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
-            Text(
-                text = title,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Start,
-                fontWeight = FontWeight.Medium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = content,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Left
-            )
-        }
-    }
-}
 
 @Composable
-fun GreetingText(userName: String){
+fun Header(userName: String){
     Spacer(modifier = Modifier.padding(5.dp))
-    Row(modifier = Modifier.padding(8.dp)){
+    Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically){
         Text(text = "Bienvenido ", color = Color.Black, fontSize = 23.sp)
         Text(text = userName, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 23.sp)
+        Spacer(modifier = Modifier.weight(1f))
+        IconButton(onClick = { Navigation.controller!!.navigate("ProfileScreen")}) {
+            Icon(imageVector = Icons.Outlined.PersonOutline, contentDescription = null, modifier = Modifier.size(30.dp))
+        }
     }
 }
 
@@ -147,22 +119,16 @@ fun HeaderGrid(c1: String, c2: String, c3: String, c4: String){
             .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp),
         horizontalArrangement = Arrangement.spacedBy(0.dp)
     ){
-        HeaderBox(title = "Calorias", content = c1)
-        HeaderBox(title = "Tiempo Activo", content = c2)
+        InfoCard(title = "Puntuación ", content = c1)
+        InfoCard(title = "Tiempo Activo", content = c2)
     }
     Row(
-        modifier = Modifier.fillMaxWidth().defaultMinSize(minWidth = 1.dp, minHeight = 1.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp),
         horizontalArrangement = Arrangement.spacedBy(0.dp)
     ){
-        HeaderBox(title = "Comidas", content = c3)
-        HeaderBox(title = "Entrenamientos", content = c4)
+        InfoCard(title = "Comidas", content = c3)
+        InfoCard(title = "Entrenamientos", content = c4)
     }
 }
-
-/*
-@Preview(showSystemUi = true)
-@Composable
-fun DefaultPreview(){
-    HomeScreen()
-}
-*/

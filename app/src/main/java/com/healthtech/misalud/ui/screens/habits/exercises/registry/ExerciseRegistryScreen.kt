@@ -1,16 +1,13 @@
 package com.healthtech.misalud.ui.screens.habits.exercises.registry
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +17,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.components.InputField
-import androidx.compose.material3.Slider
+import com.healthtech.misalud.ui.components.CustomScaffold
 import com.healthtech.misalud.ui.components.RoundedButton
-import com.healthtech.misalud.ui.components.SectionTitle
+import com.healthtech.misalud.ui.components.ScoreSlider
 
 @Composable
 fun ExerciseRegistryScreen(viewModel: ExercisesViewModel){
@@ -33,23 +30,27 @@ fun ExerciseRegistryScreen(viewModel: ExercisesViewModel){
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Header()
-            Body(viewModel)
-            Footer(viewModel)
-        }
+        CustomScaffold(
+            title = "Añadir Ejercicio",
+            returnRoute = "HomeScreen",
+            content = { ScreenContents(viewModel, it) }
+        )
     }
 }
 
 @Composable
-fun Header(){
-    SectionTitle(title = "Agregar Ejercicio")
+fun ScreenContents(viewModel: ExercisesViewModel, paddingValues: PaddingValues){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Spacer(modifier = Modifier.padding(paddingValues))
+        Body(viewModel)
+        Footer(viewModel)
+    }
 }
 
 @Composable
@@ -61,44 +62,32 @@ fun Body(viewModel: ExercisesViewModel){
     viewModel.onScoreChange(score)
 
     InputField(
-        placeholder = "Ingresa el nombre del Ejercicio",
+        placeholder = "Nombre del Ejercicio",
         onChange = { viewModel.onNameChange(it) },
         textValue = name,
-        spaced = true,
-        padding = 15
     )
 
     InputField(
-        placeholder = "Ingresa la duracion del ejercicio en minutos",
+        placeholder = "Duracion del ejercicio (Minutos)",
         onChange = { viewModel.onDurationChange(it) },
         textValue = duration,
         spaced = true,
-        padding = 15
+        padding = 5
     )
 
-    Text(text = "Calificacion del Ejercicio")
-    Slider(
-        value = score,
-        onValueChange = { viewModel.onScoreChange(it) },
-        valueRange = 0f..2f,
-        steps = 1,
-        modifier = Modifier.fillMaxWidth()
+    ScoreSlider(
+        title = "Calificación del Ejercicio",
+        score = score,
+        onChangeFunction = { viewModel.onScoreChange(it) },
+        spaced = true,
+        padding = 5
     )
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Text(text = "Malo")
-        Text(text = "Regular")
-        Text(text = "Bueno")
-    }
 }
-
 
 @Composable
 fun Footer(viewModel: ExercisesViewModel){
     RoundedButton(
-        text = "Agregar Ejercicio",
+        text = "Añadir Ejercicio",
         onClick = { viewModel.addRecord() },
         fullWidth = true,
         bold = true

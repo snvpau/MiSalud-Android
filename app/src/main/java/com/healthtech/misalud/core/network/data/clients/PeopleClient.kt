@@ -36,6 +36,13 @@ interface PeopleClient {
         @Query("range") range: String
     ) : Response<PeopleResponses.GetExerciseRecords>
 
+    @GET("/api/v1/people/ui/data/app?")
+    suspend fun doGetHomeScreenData(
+        @Header("Authorization") accessToken: String,
+        @Query("type") type: String,
+        @Query("uuid") uuid: String
+    ) : Response<PeopleResponses.GetHomeScreenData>
+
     @POST("/api/v1/people/meals")
     suspend fun doAddMealRecord(
         @Header("Authorization") accessToken: String,

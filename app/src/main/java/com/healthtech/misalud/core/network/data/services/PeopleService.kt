@@ -80,14 +80,25 @@ class PeopleService {
     suspend fun doAddExerciseRecord(accessToken: String, uuid: String, name: String, duration: Int, score: Float) : PeopleResponses.PostExerciseRecord {
         val exerciseRequest = PeopleRequests.PostExerciseRecord(uuid, name, duration, score)
 
-        Log.i("Test", exerciseRequest.toString())
-
         return withContext(Dispatchers.IO){
             val response = retrofit.create(PeopleClient::class.java).doAddExerciseRecord(accessToken, exerciseRequest)
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
                 return@withContext Gson().fromJson<PeopleResponses.PostExerciseRecord?>(jsonObject, PeopleResponses.PostExerciseRecord::class.java)
+            }
+
+            return@withContext response.body()!!
+        }
+    }
+
+    suspend fun doGetHomeScreenData(accessToken: String, uuid: String) : PeopleResponses.GetHomeScreenData {
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(PeopleClient::class.java).doGetHomeScreenData(accessToken, "homeScreen", uuid)
+
+            if(!response.isSuccessful) {
+                val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                return@withContext Gson().fromJson<PeopleResponses.GetHomeScreenData?>(jsonObject, PeopleResponses.GetHomeScreenData::class.java)
             }
 
             return@withContext response.body()!!

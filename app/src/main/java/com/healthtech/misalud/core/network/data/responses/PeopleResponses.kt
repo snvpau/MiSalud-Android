@@ -1,6 +1,7 @@
 package com.healthtech.misalud.core.network.data.responses
 
 import com.healthtech.misalud.core.models.ExerciseRecord
+import com.healthtech.misalud.core.models.HomeScreenData
 import com.healthtech.misalud.core.models.MealRecord
 import com.healthtech.misalud.core.models.RequestError
 import com.healthtech.misalud.core.models.UserModel
@@ -37,5 +38,11 @@ class PeopleResponses {
         val error: RequestError?,
         val success: Boolean,
         val dates: List<String>
+    )
+
+    data class GetHomeScreenData (
+        val error: RequestError?,
+        val success: Boolean,
+        val data: HomeScreenData
     )
 }

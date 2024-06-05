@@ -1,4 +1,4 @@
-package com.healthtech.misalud.ui.screens.login.vm
+package com.healthtech.misalud.core.viewModels
 
 import android.util.Log
 import android.util.Patterns
@@ -7,16 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
+import com.healthtech.misalud.core.navigation.Navigation
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.network.data.services.AuthService
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
 import kotlinx.coroutines.launch
 
-class LoginViewModel(navigationController: NavHostController) : ViewModel() {
+class LoginViewModel : ViewModel() {
 
     private val _authService = AuthService()
-    private val _navigationController = navigationController
 
     private val _phoneNumber = MutableLiveData<String>()
     val phoneNumber : LiveData<String> = _phoneNumber
@@ -50,33 +49,32 @@ class LoginViewModel(navigationController: NavHostController) : ViewModel() {
 
             val result = _authService.doLogin(phoneNumber.value!!, password.value!!)
             if(result.success == true) {
-                Log.i("LoginViewModel", result.accessToken.toString())
-                Log.i("LoginViewModel", result.refreshToken.toString())
 
                 TokenManagement.accessToken = result.accessToken.toString()
                 TokenManagement.refreshToken = result.refreshToken.toString()
 
                 UserManagement.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
 
-                Log.i("saveUUID", result.uuid.toString())
                 UserManagement.saveUserAttributeString("uuid", result.uuid.toString())
 
-                Log.i("LoginViewModel", "Tokens Saved")
+                _phoneNumber.value = ""
+                _password.value = ""
+                _errorText.value = ""
 
-                _navigationController.navigate("HomeScreen"){
-                    popUpTo(_navigationController.graph.findStartDestination().id){
+                Navigation.controller?.navigate("HomeScreen"){
+                    popUpTo(Navigation.controller!!.graph.findStartDestination().id){
                         inclusive = true
                     }
                 }
             } else {
                 _errorText.value = result.error?.message.toString()
-                _isLoading.value = false
             }
+            _isLoading.value = false
         }
     }
 
     fun navigate(route: String) {
-        _navigationController.navigate(route)
+        Navigation.controller!!.navigate(route)
     }
 
     fun testToken(){
