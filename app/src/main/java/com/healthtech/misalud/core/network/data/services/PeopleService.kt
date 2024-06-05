@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.network.data.services
 
-import android.util.Log
 import com.google.gson.Gson
 import com.healthtech.misalud.core.network.data.clients.PeopleClient
 import com.healthtech.misalud.core.network.data.requests.PeopleRequests

@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -76,12 +75,4 @@ class LoginViewModel : ViewModel() {
     fun navigate(route: String) {
         Navigation.controller!!.navigate(route)
     }
-
-    fun testToken(){
-        viewModelScope.launch {
-            TokenManagement.accessToken?.let { Log.i("Token Test", it) }
-            TokenManagement.refreshToken?.let { Log.i("Token Test", it) }
-        }
-    }
-
 }
