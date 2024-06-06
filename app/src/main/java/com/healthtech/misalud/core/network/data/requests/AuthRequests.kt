@@ -23,7 +23,7 @@ class AuthRequests{
 
     data class PostChangePassword(
         val uuid: String,
-        val currentPassword: String,
         val newPassword: String
     )
+
 }

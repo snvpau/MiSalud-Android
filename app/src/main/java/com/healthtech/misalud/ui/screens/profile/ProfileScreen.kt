@@ -3,6 +3,7 @@ package com.healthtech.misalud.ui.screens.profile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.healthtech.misalud.core.viewModels.ProfileViewModel
 import com.healthtech.misalud.ui.components.CustomScaffold
+import com.healthtech.misalud.ui.components.ErrorText
 import com.healthtech.misalud.ui.components.RoundedButton
 import com.healthtech.misalud.ui.components.SectionText
 import com.healthtech.misalud.ui.components.SectionTitle
@@ -58,31 +60,26 @@ fun ScreenContents(viewModel: ProfileViewModel, paddingValues: PaddingValues){
 fun Body(viewModel: ProfileViewModel){
     val name by viewModel.name.observeAsState()
     val phoneNumber by viewModel.phoneNumber.observeAsState()
+    val errorText by viewModel.errorText.observeAsState()
+    val changePasswordModal : Boolean by viewModel.changePasswordModal.observeAsState(initial = false)
+    val successPasswordModal : Boolean by viewModel.successPasswordModal.observeAsState(initial = false)
 
-    var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var showChangePasswordDialog by remember { mutableStateOf(false) }
 
     SectionTitle(title = "Información Personal", alignment = Alignment.Start)
 
     SectionText(title = "Nombre", value = name ?: "N/A", spacing = 8)
     SectionText(title = "Numero Telefonico", value = phoneNumber ?: "N/A")
-    SectionText(title = "Contraseña", value = "Cambiar", isClickable = true, onClick = { showChangePasswordDialog = true })
+    SectionText(title = "Contraseña", value = "Cambiar", isClickable = true, onClick = { viewModel.enableChangePasswordModal(true) })
 
-    if (showChangePasswordDialog) {
+    if (changePasswordModal) {
         GenericModal(
             title = "Cambiar Contraseña",
-            onDismiss = { showChangePasswordDialog = false },
-            onConfirm = { },
+            onDismiss = { viewModel.enableChangePasswordModal(false) },
+            onConfirm = { viewModel.changePassword(newPassword, confirmPassword)},
             content = {
                 Column {
-                    InputField(
-                        placeholder = "Contraseña Actual",
-                        textValue = currentPassword,
-                        keyboardType = KeyboardType.Password,
-                        onChange = { currentPassword = it },
-                    )
                     InputField(
                         placeholder = "Nueva Contraseña",
                         textValue = newPassword,
@@ -96,6 +93,24 @@ fun Body(viewModel: ProfileViewModel){
                         keyboardType = KeyboardType.Password,
                         onChange = { confirmPassword = it },
                         spaced = true
+                    )
+                    ErrorText(text = errorText ?: "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
+            }
+        )
+    }
+
+    if (successPasswordModal) {
+        GenericModal(
+            title = "Cambiar Contraseña",
+            disableCancel = true,
+            onDismiss = { viewModel.enableSuccessPasswordModal(false) },
+            onConfirm = { viewModel.enableSuccessPasswordModal(false) },
+            content = {
+                Column {
+                    Text(
+                        text = "¡Tu contaseña se ha cambiado!",
+                        color = Color(0, 150, 0)
                     )
                 }
             }

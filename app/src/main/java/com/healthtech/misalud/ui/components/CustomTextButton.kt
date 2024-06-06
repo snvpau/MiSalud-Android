@@ -1,5 +1,6 @@
 package com.healthtech.misalud.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,7 @@ fun CustomTextButton(
     fontSize: Int = 12,
     fontWeight: FontWeight = FontWeight.Bold,
     padding: Int = 4,
-    modifier: Modifier,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     if(spaced){
         Spacer(modifier = Modifier.padding(padding.dp))

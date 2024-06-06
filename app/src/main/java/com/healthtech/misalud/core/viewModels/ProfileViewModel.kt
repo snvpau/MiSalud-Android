@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,8 +14,15 @@ import kotlinx.coroutines.launch
 class ProfileViewModel : ViewModel() {
 
     private val _authService = AuthService()
+
     private val _errorText = MutableLiveData<String>()
-    val errorText: LiveData<String> get() = _errorText
+    val errorText: LiveData<String> = _errorText
+
+    private val _changePasswordModal = MutableLiveData<Boolean>()
+    val changePasswordModal: LiveData<Boolean> = _changePasswordModal
+
+    private val _successPasswordModal = MutableLiveData<Boolean>()
+    val successPasswordModal: LiveData<Boolean> = _successPasswordModal
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -39,17 +45,34 @@ class ProfileViewModel : ViewModel() {
         _isLoading.value = false
     }
 
-    fun changePassword(uuid: String, currentPassword: String, newPassword: String) {
+    fun enableChangePasswordModal(enabled: Boolean){
+        _changePasswordModal.value = enabled
+    }
+
+    fun enableSuccessPasswordModal(enabled: Boolean){
+        _successPasswordModal.value = enabled
+    }
+
+    fun changePassword(newPassword: String, confirmPassword: String) {
         viewModelScope.launch {
             _isLoading.value = true
+
+            val uuid = UserManagement.getUserAttributeString("uuid")
+
+            if(newPassword != confirmPassword){
+                _errorText.value = "Las Contraseñas no Coinciden"
+                _isLoading.value = false
+                return@launch
+            }
             try {
-                val response = _authService.changePassword(uuid, currentPassword, newPassword)
-                if (response.isSuccessful && response.body()?.success == true) {
-                } else {
-                    _errorText.value = response.body()?.error?.message ?: "Error changing password"
+                val response = _authService.doChangePassword(uuid!!, newPassword)
+                if (response.success == true) {
+                    enableChangePasswordModal(false)
+                    enableSuccessPasswordModal(true)
+                    _isLoading.value = false
                 }
             } catch (e: Exception) {
-                _errorText.value = e.message ?: "An error occurred"
+                _errorText.value = e.message ?: "Ocurrio un Error"
             } finally {
                 _isLoading.value = false
             }
@@ -60,8 +83,6 @@ class ProfileViewModel : ViewModel() {
 
         viewModelScope.launch {
             _isLoading.value = true
-
-            TokenManagement.refreshToken?.let { Log.i("test", it) }
 
             val result = _authService.doLogout(TokenManagement.refreshToken!!)
             if(result.success == true){
@@ -74,11 +95,9 @@ class ProfileViewModel : ViewModel() {
                     }
                 }
 
-            } else {
-                //_errorText.value = result.error?.message.toString()
             }
-            _isLoading.value = false
 
+            _isLoading.value = false
         }
     }
 
