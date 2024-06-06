@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -61,14 +60,14 @@ class RegistryViewModel : ViewModel(){
 
             val result = _authService.doCreateAccount(firstName.value!!, lastName.value!! ,phoneNumber.value!!, password.value!!)
             if(result.success == true){
-                Log.i("RegistryViewModel", result.accessToken.toString())
-                Log.i("RegistryViewModel", result.refreshToken.toString())
-
                 TokenManagement.accessToken = result.accessToken.toString()
                 TokenManagement.refreshToken = result.refreshToken.toString()
 
+                UserManagement.saveUserAttributeString("uuid", result.uuid.toString())
+
                 UserManagement.saveUserAttributeString("phoneNumber", _phoneNumber.value!!)
-                Log.i("LoginViewModel", "Tokens Saved")
+                UserManagement.saveUserAttributeString("firstName", firstName.value!!)
+                UserManagement.saveUserAttributeString("lastName", lastName.value!!)
 
                 Navigation.controller!!.navigate("HomeScreen"){
                     popUpTo(Navigation.controller!!.graph.findStartDestination().id){

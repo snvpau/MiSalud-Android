@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +35,9 @@ class MealsViewModel: ViewModel() {
     private val _name = MutableLiveData<String>()
     val name : LiveData<String> = _name
 
+    private val _selectorItemList = MutableLiveData<List<String>>()
+    val selectorItemList: LiveData<List<String>> = _selectorItemList
+
     private val _selectorState = MutableLiveData<String>()
     val selectorState: LiveData<String> = _selectorState
 
@@ -52,6 +54,10 @@ class MealsViewModel: ViewModel() {
 
     fun onScoreChange(text: Float){
         _score.value = text
+    }
+
+    fun setItemList(list: List<String>){
+        _selectorItemList.value = list
     }
 
     fun setFilterItems(list: List<FilterItem>){
@@ -92,7 +98,6 @@ class MealsViewModel: ViewModel() {
 
     fun getRecordDays(){
         viewModelScope.launch {
-            Log.i("StartFetch","StartFetch")
             _isLoading.value = true
 
             val accessToken = "Bearer " + TokenManagement.accessToken
@@ -108,7 +113,6 @@ class MealsViewModel: ViewModel() {
             }
 
             _isLoading.value = false
-            Log.i("EndFetch","EndFetch")
         }
     }
 
@@ -121,10 +125,13 @@ class MealsViewModel: ViewModel() {
 
             val result = _peopleService.doAddMealRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, _score.value!!)
             if(result.success == true){
+                _name.value = ""
+                _selectorState.value = _selectorItemList.value!![0]
+                _score.value = 1f
+
                 Navigation.controller!!.navigate("MealRecord")
             } else {
                 //_errorText.value = result.error?.message.toString()
-                Log.i("error", result.error?.message.toString())
             }
 
             _isLoading.value = false

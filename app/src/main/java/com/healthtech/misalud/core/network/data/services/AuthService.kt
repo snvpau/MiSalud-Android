@@ -1,5 +1,6 @@
 package com.healthtech.misalud.core.network.data.services
 
+import android.util.Log
 import com.google.gson.Gson
 import com.healthtech.misalud.core.network.retrofit.RetrofitHelper
 import com.healthtech.misalud.core.network.data.clients.AuthClient
@@ -45,11 +46,16 @@ class AuthService {
     suspend fun doCreateAccount(firstName: String, lastName: String, phoneNumber: String, password: String) : AuthResponses.PostLogin {
         val registryRequest = AuthRequests.PostRegistry(firstName, lastName, phoneNumber, password)
 
+        Log.i("Test", registryRequest.toString())
+
         return withContext(Dispatchers.IO){
             val response = retrofit.create(AuthClient::class.java).doRegisterUser(registryRequest)
 
+            Log.i("Test", response.toString())
+
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                Log.i("TEst", jsonObject)
                 return@withContext Gson().fromJson<AuthResponses.PostLogin?>(jsonObject, AuthResponses.PostLogin::class.java)
             }
 

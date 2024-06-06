@@ -41,12 +41,16 @@ fun DatePicker(calendarState: UseCaseState, onCalendarOK: (String) -> Unit, allo
         boundary.toIterable() - allowedDates.toSet()
     }
 
+    calendarState.invokeReset()
+
     CalendarDialog(
         state = calendarState,
         config = CalendarConfig(
             style = CalendarStyle.MONTH,
             disabledDates = disabledDates,
             boundary = boundary,
+            monthSelection = true,
+            yearSelection = true
         ),
         selection = CalendarSelection.Date { newDate ->
             onCalendarOK(newDate.toString())

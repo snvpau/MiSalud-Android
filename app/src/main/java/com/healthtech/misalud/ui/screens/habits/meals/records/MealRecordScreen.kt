@@ -101,7 +101,14 @@ fun Body(viewModel: MealsViewModel){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRow(title = record.type, description = record.name, score = record.score, icon = Icons.Rounded.AccessTime) {}
+            InfoRow(
+                title = record.type,
+                description = record.name,
+                score = record.score,
+                spaced = true,
+                padding = 5,
+                icon = Icons.Rounded.AccessTime
+            ) {}
         }
     }
 
