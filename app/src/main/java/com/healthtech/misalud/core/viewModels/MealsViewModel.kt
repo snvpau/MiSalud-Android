@@ -44,8 +44,12 @@ class MealsViewModel: ViewModel() {
     private val _score = MutableLiveData<Float>()
     val score: LiveData<Float> = _score
 
+    private val _submitEnabled = MutableLiveData<Boolean>()
+    val submitEnabled: LiveData<Boolean> = _submitEnabled
+
     fun onNameChange(text: String){
         _name.value = text
+        _submitEnabled.value = _name.value!!.length > 2
     }
 
     fun onSelectorChange(state: String){

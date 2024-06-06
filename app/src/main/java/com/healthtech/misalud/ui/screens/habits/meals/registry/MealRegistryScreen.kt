@@ -60,6 +60,7 @@ fun Body(viewModel: MealsViewModel){
     val items : List<String> by viewModel.selectorItemList.observeAsState(initial =  listOf("Desayuno", "Comida", "Cena", "Colación"))
     val score : Float by viewModel.score.observeAsState(initial = 1f)
     val selectorState : String by viewModel.selectorState.observeAsState(items[0])
+
     viewModel.onSelectorChange(selectorState)
     viewModel.setItemList(items)
 
@@ -92,10 +93,19 @@ fun Body(viewModel: MealsViewModel){
 
 @Composable
 fun Footer(viewModel: MealsViewModel){
+    val submitEnabled: Boolean by viewModel.submitEnabled.observeAsState(initial = false)
+
     RoundedButton(
         text = "Añadir Comida",
+        enabled = submitEnabled,
         onClick = { viewModel.addRecord() },
+        backgroundColor = Color(2, 172, 237),
+        disabledBackgroundColor = Color(102, 192, 226, 255),
+        contentColor = Color.White,
+        disabledContentColor = Color.White,
         fullWidth = true,
-        bold = true
+        bold = true,
+        spaced = true,
+        padding = 20
     )
 }

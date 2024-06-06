@@ -86,10 +86,19 @@ fun Body(viewModel: ExercisesViewModel){
 
 @Composable
 fun Footer(viewModel: ExercisesViewModel){
+    val submitEnabled: Boolean by viewModel.submitEnabled.observeAsState(initial = false)
+
     RoundedButton(
         text = "Añadir Ejercicio",
         onClick = { viewModel.addRecord() },
+        backgroundColor = Color(2, 172, 237),
+        disabledBackgroundColor = Color(102, 192, 226, 255),
+        contentColor = Color.White,
+        disabledContentColor = Color.White,
+        enabled = submitEnabled,
         fullWidth = true,
-        bold = true
+        bold = true,
+        spaced = true,
+        padding = 20
     )
 }
