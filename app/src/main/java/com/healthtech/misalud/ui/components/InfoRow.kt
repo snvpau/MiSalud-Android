@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InfoRow(title: String, description: String, score: Float = 0f, icon: ImageVector? = null, endContent: @Composable RowScope.() -> Unit){
+fun InfoRow(
+    title: String,
+    description: String,
+    score: Float = 0f,
+    icon: ImageVector? = null,
+    spaced: Boolean = false,
+    padding: Int = 4,
+    endContent: @Composable RowScope.() -> Unit
+){
+    if(spaced){
+        Spacer(modifier = Modifier.padding(padding.dp))
+    }
+
+    val textScore = when (score) {
+        0f -> "Bajo"
+        1f -> "Medio"
+        else -> "Alto"
+    }
+
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
         Box(
             contentAlignment = Alignment.Center,
@@ -42,7 +61,7 @@ fun InfoRow(title: String, description: String, score: Float = 0f, icon: ImageVe
         Column{
             Text(text = title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
             Text(text = description)
-            Text(text = "Puntuación: $score")
+            Text(text = "Puntuación: $textScore")
         }
         Row(horizontalArrangement = Arrangement.End, modifier = Modifier
             .fillMaxWidth()

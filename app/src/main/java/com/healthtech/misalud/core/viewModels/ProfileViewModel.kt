@@ -33,7 +33,7 @@ class ProfileViewModel : ViewModel() {
     private val _phoneNumber = MutableLiveData<String>()
     val phoneNumber: LiveData<String> = _phoneNumber
 
-    init {
+    fun setUserData() {
         if(UserManagement.getUserAttributeString("firstName") != null && UserManagement.getUserAttributeString("lastName") != null){
             _name.value = UserManagement.getUserAttributeString("firstName") + " " + UserManagement.getUserAttributeString("lastName")
         } else {
@@ -41,7 +41,6 @@ class ProfileViewModel : ViewModel() {
         }
 
         _phoneNumber.value = UserManagement.getUserAttributeString("phoneNumber") ?: "N/A"
-
         _isLoading.value = false
     }
 

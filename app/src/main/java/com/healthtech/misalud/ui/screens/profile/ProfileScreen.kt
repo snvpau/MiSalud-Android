@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,10 @@ import com.healthtech.misalud.ui.components.InputField
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel){
+    LaunchedEffect(Unit) {
+        viewModel.setUserData()
+    }
+
     val isLoading : Boolean by viewModel.isLoading.observeAsState(initial = false)
 
     if(isLoading){
