@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -92,7 +91,6 @@ class ExercisesViewModel: ViewModel() {
 
     fun getRecordDays(){
         viewModelScope.launch {
-            Log.i("StartFetch","StartFetch")
             _isLoading.value = true
 
             val accessToken = "Bearer " + TokenManagement.accessToken
@@ -108,7 +106,6 @@ class ExercisesViewModel: ViewModel() {
             }
 
             _isLoading.value = false
-            Log.i("EndFetch","EndFetch")
         }
     }
 
@@ -127,7 +124,6 @@ class ExercisesViewModel: ViewModel() {
                 Navigation.controller!!.navigate("ExerciseRecord")
             } else {
                 //_errorText.value = result.error?.message.toString()
-                Log.i("error", result.error?.message.toString())
             }
 
             _isLoading.value = false
