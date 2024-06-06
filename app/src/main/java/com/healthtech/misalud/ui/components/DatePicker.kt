@@ -50,10 +50,10 @@ fun DatePicker(calendarState: UseCaseState, onCalendarOK: (String) -> Unit, allo
             disabledDates = disabledDates,
             boundary = boundary,
             monthSelection = true,
-            yearSelection = true
+            yearSelection = true,
         ),
         selection = CalendarSelection.Date { newDate ->
             onCalendarOK(newDate.toString())
-        },
+        }
     )
 }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.components.CustomScaffold
@@ -101,7 +102,14 @@ fun Body(viewModel: ExercisesViewModel){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRow(title = record.name, description = "Duración: " + record.duration.toString() + " min", score = record.score, icon = Icons.Rounded.AccessTime) {}
+            InfoRow(
+                title = record.name,
+                description = "Duración: " + record.duration.toString() + " min",
+                score = record.score,
+                spaced = true,
+                padding = 5,
+                icon = Icons.Rounded.AccessTime
+            ) {}
         }
     }
 
@@ -110,5 +118,12 @@ fun Body(viewModel: ExercisesViewModel){
 
 @Composable
 fun Footer(viewModel: ExercisesViewModel){
-    RoundedButton(text = "Agregar Ejercicio", fullWidth = true, bold = true, onClick = {viewModel.navigate("ExerciseRegistry")})
+    RoundedButton(
+        text = "Agregar Ejercicio",
+        fullWidth = true,
+        bold = true,
+        backgroundColor = Color(2, 172, 237),
+        contentColor = Color.White,
+        onClick = {viewModel.navigate("ExerciseRegistry")}
+    )
 }

@@ -73,8 +73,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
                     onClick = { viewModel.onLoginSelected() },
                     fullWidth = true,
                     enabled = loginEnabled,
-                    backgroundColor = Color(44, 90, 168),
-                    disabledBackgroundColor = Color(99, 156, 255, 255),
+                    backgroundColor = Color(2, 172, 237),
+                    disabledBackgroundColor = Color(102, 192, 226, 255),
                     contentColor = Color.White,
                     disabledContentColor = Color.White,
                     height = 48

@@ -41,12 +41,27 @@ class ExercisesViewModel: ViewModel() {
     private val _score = MutableLiveData<Float>()
     val score : LiveData<Float> = _score
 
+    private val _submitEnabled = MutableLiveData<Boolean>()
+    val submitEnabled: LiveData<Boolean> = _submitEnabled
+
     fun onNameChange(text: String){
         _name.value = text
+        validateForm()
     }
 
     fun onDurationChange(text: String){
         _duration.value = text
+        validateForm()
+    }
+
+    private fun validateForm(){
+        val durationValid = if (_duration.value?.isNotEmpty() == true){
+            _duration.value!!.matches("-?\\d+(\\.\\d+)?".toRegex())
+        } else {
+            false
+        }
+
+        _submitEnabled.value = ((_name.value!!.length > 2) && durationValid)
     }
 
     fun onScoreChange(num: Float){

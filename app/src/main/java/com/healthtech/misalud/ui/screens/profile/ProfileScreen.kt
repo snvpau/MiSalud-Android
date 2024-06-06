@@ -129,6 +129,8 @@ fun Footer(viewModel: ProfileViewModel){
         text = "Cerrar Sesión",
         onClick = { viewModel.logOut() },
         fullWidth = true,
-        bold = true
+        bold = true,
+        backgroundColor = Color(2, 172, 237),
+        contentColor = Color.White,
     )
 }
