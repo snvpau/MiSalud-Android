@@ -10,19 +10,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.healthtech.misalud.ui.screens.home.vm.HomeViewModel
-import com.healthtech.misalud.ui.screens.login.ui.LoginScreen
-import com.healthtech.misalud.ui.screens.login.vm.LoginViewModel
-import com.healthtech.misalud.ui.screens.navigationcontroller.ui.NavigationController
-import com.healthtech.misalud.ui.screens.profile.vm.ProfileViewModel
-import com.healthtech.misalud.ui.screens.registry.ui.RegistryScreen_1
-import com.healthtech.misalud.ui.screens.registry.vm.RegistryViewModel
+import com.healthtech.misalud.core.navigation.Navigation
+import com.healthtech.misalud.core.viewModels.HomeViewModel
+import com.healthtech.misalud.ui.screens.login.LoginScreen
+import com.healthtech.misalud.core.viewModels.LoginViewModel
+import com.healthtech.misalud.core.viewModels.ProfileViewModel
+import com.healthtech.misalud.core.viewModels.RegistryViewModel
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
 import com.healthtech.misalud.core.storage.sharedPreferences.UserManagement
+import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.screens.habits.meals.records.MealRecordScreen
 import com.healthtech.misalud.ui.screens.habits.meals.registry.MealRegistryScreen
 import com.healthtech.misalud.core.viewModels.MealsViewModel
+import com.healthtech.misalud.ui.screens.habits.exercises.records.ExerciseRecordScreen
+import com.healthtech.misalud.ui.screens.habits.exercises.registry.ExerciseRegistryScreen
+import com.healthtech.misalud.ui.screens.home.HomeScreen
+import com.healthtech.misalud.ui.screens.profile.ProfileScreen
+import com.healthtech.misalud.ui.screens.registry.RegistryScreen
 import com.healthtech.misalud.ui.theme.MiSaludTheme
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 
@@ -35,14 +39,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MiSaludTheme {
-                val navigationController  = rememberNavController()
+                Navigation.Init()
                 val coroutineScope = rememberCoroutineScope()
 
-                val loginViewModel = LoginViewModel(navigationController = navigationController)
-                val registryViewModel = RegistryViewModel(navigationController = navigationController)
-                val homeViewModel = HomeViewModel(navigationController = navigationController)
-                val profileViewModel = ProfileViewModel(navigationController = navigationController)
-                val mealsViewModel = MealsViewModel(navigationController = navigationController)
+                val loginViewModel = LoginViewModel()
+                val registryViewModel = RegistryViewModel()
+                val homeViewModel = HomeViewModel()
+                val profileViewModel = ProfileViewModel()
+                val mealsViewModel = MealsViewModel()
+                val exercisesViewModel = ExercisesViewModel()
 
                 val calendarState = rememberUseCaseState()
 
@@ -57,15 +62,18 @@ class MainActivity : ComponentActivity() {
                     val entryPoint : String = if(refreshToken == null && phoneNumber == null){
                         "LoginScreen"
                     } else {
-                        "LoginScreen"
+                        "HomeScreen"
                     }
 
-                    NavHost(navController = navigationController, startDestination = entryPoint){
+                    NavHost(navController = Navigation.controller!!, startDestination = entryPoint){
                         composable("LoginScreen") { LoginScreen(loginViewModel) }
-                        composable("RegistryScreen_1") { RegistryScreen_1(registryViewModel) }
-                        composable("HomeScreen") { NavigationController(homeViewModel, profileViewModel) }
+                        composable("RegistryScreen") { RegistryScreen(registryViewModel) }
+                        composable("HomeScreen") { HomeScreen(homeViewModel) }
                         composable("MealRecord") { MealRecordScreen(mealsViewModel, calendarState, coroutineScope) }
                         composable("MealRegistry") { MealRegistryScreen(mealsViewModel) }
+                        composable("ExerciseRecord") { ExerciseRecordScreen(exercisesViewModel, calendarState, coroutineScope) }
+                        composable("ExerciseRegistry") { ExerciseRegistryScreen(exercisesViewModel) }
+                        composable("ProfileScreen") { ProfileScreen(profileViewModel) }
                     }
                 }
             }

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.healthtech.misalud.core.models.MealRecord
+import com.healthtech.misalud.core.models.ExerciseRecord
 import com.healthtech.misalud.core.navigation.Navigation
 import com.healthtech.misalud.core.network.data.services.PeopleService
 import com.healthtech.misalud.core.storage.sharedPreferences.TokenManagement
@@ -14,44 +14,44 @@ import com.healthtech.misalud.ui.components.FilterItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class MealsViewModel: ViewModel() {
+class ExercisesViewModel: ViewModel() {
 
     private val _peopleService = PeopleService()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    //MealRecord
+    //ExerciseRecord
     private val _filterItemList = MutableLiveData<List<FilterItem>>()
     val filterItemList : LiveData<List<FilterItem>> = _filterItemList
 
-    private val _records = MutableLiveData<List<MealRecord>>()
-    val records: LiveData<List<MealRecord>> = _records
+    private val _records = MutableLiveData<List<ExerciseRecord>>()
+    val records: LiveData<List<ExerciseRecord>> = _records
 
     private val _allowedDays = MutableLiveData<List<String>>()
     val allowedDays: LiveData<List<String>> = _allowedDays
 
-    //MealRegistry
+    //ExerciseRegistry
 
     private val _name = MutableLiveData<String>()
     val name : LiveData<String> = _name
 
-    private val _selectorState = MutableLiveData<String>()
-    val selectorState: LiveData<String> = _selectorState
+    private val _duration = MutableLiveData<String>()
+    val duration : LiveData<String> = _duration
 
     private val _score = MutableLiveData<Float>()
-    val score: LiveData<Float> = _score
+    val score : LiveData<Float> = _score
 
     fun onNameChange(text: String){
         _name.value = text
     }
 
-    fun onSelectorChange(state: String){
-        _selectorState.value = state
+    fun onDurationChange(text: String){
+        _duration.value = text
     }
 
-    fun onScoreChange(text: Float){
-        _score.value = text
+    fun onScoreChange(num: Float){
+        _score.value = num
     }
 
     fun setFilterItems(list: List<FilterItem>){
@@ -63,21 +63,21 @@ class MealsViewModel: ViewModel() {
             if (idx == index) item.copy(selected = true) else item.copy(selected = false)
         }
         _filterItemList.value = newList
-        getRecords(range)
+        getExerciseRecords(range)
     }
 
     fun navigate(route: String) {
         Navigation.controller!!.navigate(route)
     }
 
-    fun getRecords(range: String){
+    fun getExerciseRecords(range: String){
         viewModelScope.launch {
             _isLoading.value = true
 
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = async { _peopleService.doGetMealRecords(accessToken, uuid, range) }
+            val result = async { _peopleService.doGetExerciseRecords(accessToken, uuid, range) }
             val infoDeffered = result.await()
 
             if(infoDeffered.success){
@@ -119,9 +119,12 @@ class MealsViewModel: ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = _peopleService.doAddMealRecord(accessToken, uuid, _name.value!!, _selectorState.value!!, _score.value!!)
+            val result = _peopleService.doAddExerciseRecord(accessToken, uuid, _name.value!!, _duration.value?.toIntOrNull()!!, _score.value!!)
             if(result.success == true){
-                Navigation.controller!!.navigate("MealRecord")
+                _name.value = ""
+                _duration.value = ""
+                _score.value = 1f
+                Navigation.controller!!.navigate("ExerciseRecord")
             } else {
                 //_errorText.value = result.error?.message.toString()
                 Log.i("error", result.error?.message.toString())

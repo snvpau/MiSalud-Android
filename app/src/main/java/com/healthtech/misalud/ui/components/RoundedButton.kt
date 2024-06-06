@@ -2,6 +2,7 @@ package com.healthtech.misalud.ui.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,6 +34,7 @@ fun RoundedButton(
     fullWidth: Boolean = false,
     spaced: Boolean = true,
     padding: Int = 8,
+    height: Int = 40,
     selected: Boolean = false
 ){
     if(spaced){
@@ -44,7 +46,7 @@ fun RoundedButton(
     Button(
         enabled = enabled,
         onClick = onClick,
-        modifier = Modifier.conditional(fullWidth){ fillMaxWidth() },
+        modifier = Modifier.conditional(fullWidth){ fillMaxWidth().height(height.dp) },
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
             contentColor = contentColor,

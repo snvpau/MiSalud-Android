@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.network.data.services
 
-import android.util.Log
 import com.google.gson.Gson
 import com.healthtech.misalud.core.network.data.clients.PeopleClient
 import com.healthtech.misalud.core.network.data.requests.PeopleRequests
@@ -18,8 +17,6 @@ class PeopleService {
             val response = retrofit.create(PeopleClient::class.java).doGetUser(accessToken = accessToken, phoneNumber = phoneNumber)
 
             if(!response.isSuccessful) {
-                Log.i("PeopleService", response.raw().request().toString())
-                Log.i("PeopleService", response.errorBody()!!.charStream().readText())
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
                 return@withContext Gson().fromJson<PeopleResponses.GetUserData?>(jsonObject, PeopleResponses.GetUserData::class.java)
             }
@@ -41,9 +38,9 @@ class PeopleService {
         }
     }
 
-    suspend fun doGetRecords(accessToken: String, uuid: String, range: String) : PeopleResponses.GetMealRecords {
+    suspend fun doGetMealRecords(accessToken: String, uuid: String, range: String) : PeopleResponses.GetMealRecords {
         return withContext(Dispatchers.IO){
-            val response = retrofit.create(PeopleClient::class.java).doGetRecords(accessToken, uuid, range)
+            val response = retrofit.create(PeopleClient::class.java).doGetMealRecords(accessToken, uuid, range)
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
@@ -53,16 +50,54 @@ class PeopleService {
             return@withContext response.body()!!
         }
     }
+    suspend fun doGetExerciseRecords(accessToken: String, uuid: String, range: String) : PeopleResponses.GetExerciseRecords {
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(PeopleClient::class.java).doGetExerciseRecords(accessToken, uuid, range)
 
-    suspend fun doAddRecord(accessToken: String, uuid: String, name: String, type: String, score: Int) : PeopleResponses.PostMealRecord {
+            if(!response.isSuccessful) {
+                val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                return@withContext Gson().fromJson<PeopleResponses.GetExerciseRecords?>(jsonObject, PeopleResponses.GetExerciseRecords::class.java)
+            }
+
+            return@withContext response.body()!!
+        }
+    }
+    suspend fun doAddMealRecord(accessToken: String, uuid: String, name: String, type: String, score: Float) : PeopleResponses.PostMealRecord {
         val mealRequest = PeopleRequests.PostMealRecord(uuid, name, type, score)
 
         return withContext(Dispatchers.IO){
-            val response = retrofit.create(PeopleClient::class.java).doAddRecord(accessToken, mealRequest)
+            val response = retrofit.create(PeopleClient::class.java).doAddMealRecord(accessToken, mealRequest)
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
                 return@withContext Gson().fromJson<PeopleResponses.PostMealRecord?>(jsonObject, PeopleResponses.PostMealRecord::class.java)
+            }
+
+            return@withContext response.body()!!
+        }
+    }
+    suspend fun doAddExerciseRecord(accessToken: String, uuid: String, name: String, duration: Int, score: Float) : PeopleResponses.PostExerciseRecord {
+        val exerciseRequest = PeopleRequests.PostExerciseRecord(uuid, name, duration, score)
+
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(PeopleClient::class.java).doAddExerciseRecord(accessToken, exerciseRequest)
+
+            if(!response.isSuccessful) {
+                val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                return@withContext Gson().fromJson<PeopleResponses.PostExerciseRecord?>(jsonObject, PeopleResponses.PostExerciseRecord::class.java)
+            }
+
+            return@withContext response.body()!!
+        }
+    }
+
+    suspend fun doGetHomeScreenData(accessToken: String, uuid: String) : PeopleResponses.GetHomeScreenData {
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(PeopleClient::class.java).doGetHomeScreenData(accessToken, "homeScreen", uuid)
+
+            if(!response.isSuccessful) {
+                val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                return@withContext Gson().fromJson<PeopleResponses.GetHomeScreenData?>(jsonObject, PeopleResponses.GetHomeScreenData::class.java)
             }
 
             return@withContext response.body()!!
