@@ -25,7 +25,7 @@ fun InfoCard(title: String, content: String){
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .width(180.dp)
+            .width(185.dp)
             .height(120.dp)
             .padding(8.dp)
             .clip(RoundedCornerShape(12.dp))

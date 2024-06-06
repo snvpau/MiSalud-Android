@@ -57,10 +57,11 @@ fun ScreenContents(viewModel: MealsViewModel, paddingValues: PaddingValues){
 @Composable
 fun Body(viewModel: MealsViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
-    val items = listOf("Desayuno", "Comida", "Cena", "Colación")
-    val score : Float by viewModel.score.observeAsState(initial = 0f)
+    val items : List<String> by viewModel.selectorItemList.observeAsState(initial =  listOf("Desayuno", "Comida", "Cena", "Colación"))
+    val score : Float by viewModel.score.observeAsState(initial = 1f)
     val selectorState : String by viewModel.selectorState.observeAsState(items[0])
     viewModel.onSelectorChange(selectorState)
+    viewModel.setItemList(items)
 
     InputField(
         placeholder = "Nombre del Alimento",
@@ -92,7 +93,7 @@ fun Body(viewModel: MealsViewModel){
 @Composable
 fun Footer(viewModel: MealsViewModel){
     RoundedButton(
-        text = "Agregar Comida",
+        text = "Añadir Comida",
         onClick = { viewModel.addRecord() },
         fullWidth = true,
         bold = true

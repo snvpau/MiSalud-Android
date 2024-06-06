@@ -1,6 +1,5 @@
 package com.healthtech.misalud.core.viewModels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -50,8 +49,6 @@ class HomeViewModel : ViewModel() {
                 val infoDeffered = result.await()
 
                 if(infoDeffered.success){
-                    Log.i("HOME", infoDeffered.user.firstName)
-                    Log.i("HOME", infoDeffered.user.lastName)
                     _firstName.value = infoDeffered.user.firstName
                     UserManagement.saveUserAttributeString(key = "firstName", infoDeffered.user.firstName)
                     UserManagement.saveUserAttributeString(key = "lastName", infoDeffered.user.lastName)
