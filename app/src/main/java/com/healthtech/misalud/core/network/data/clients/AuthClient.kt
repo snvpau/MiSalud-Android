@@ -19,5 +19,9 @@ interface AuthClient {
 
     @POST("/api/v1/auth/refreshAccessToken")
     fun doRefreshAccessToken(@Body refreshTokenRequest: AuthRequests.PostRefreshAccessToken) : Call<AuthResponses.PostRefreshAccessToken>
+
+    @POST("/api/v1/auth/changePassword")
+    suspend fun doChangePassword(@Body changePasswordRequest: AuthRequests.PostChangePassword): Response<AuthResponses.PostChangePassword>
+
 }
 

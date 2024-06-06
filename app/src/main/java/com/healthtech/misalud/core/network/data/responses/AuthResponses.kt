@@ -21,4 +21,10 @@ class AuthResponses {
         val success: Boolean?,
         val accessToken: String?
     )
+
+    data class PostChangePassword(
+        val error: RequestError?,
+        val success: Boolean?,
+        val message: String?
+    )
 }

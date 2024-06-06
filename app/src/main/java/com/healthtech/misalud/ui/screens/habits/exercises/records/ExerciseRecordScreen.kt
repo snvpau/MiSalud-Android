@@ -1,4 +1,4 @@
-package com.healthtech.misalud.ui.screens.habits.meals.records
+package com.healthtech.misalud.ui.screens.habits.exercises.records
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,7 +18,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.healthtech.misalud.core.viewModels.MealsViewModel
+import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.components.CustomScaffold
 import com.healthtech.misalud.ui.components.DatePicker
 import com.healthtech.misalud.ui.components.FilterBar
@@ -31,20 +31,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun MealRecordScreen(viewModel: MealsViewModel, calendarState: UseCaseState, coroutineScope: CoroutineScope){
+fun ExerciseRecordScreen(viewModel: ExercisesViewModel, calendarState: UseCaseState, coroutineScope: CoroutineScope){
     LaunchedEffect(Unit) {
-        viewModel.getRecords("today")
+        viewModel.getExerciseRecords("today")
     }
 
     CustomScaffold(
-        title = "Comidas",
+        title = "Ejercicios",
         returnRoute = "HomeScreen",
         content = { ScreenContents(viewModel, calendarState, it, coroutineScope) }
     )
 }
 
 @Composable
-fun ScreenContents(viewModel: MealsViewModel, calendarState: UseCaseState, paddingValues: PaddingValues, coroutineScope: CoroutineScope) {
+fun ScreenContents(viewModel: ExercisesViewModel, calendarState: UseCaseState, paddingValues: PaddingValues, coroutineScope: CoroutineScope) {
 
     val isLoading : Boolean by viewModel.isLoading.observeAsState(initial = false)
     val allowedDays by viewModel.allowedDays.observeAsState(initial = listOf())
@@ -81,7 +81,7 @@ fun ScreenContents(viewModel: MealsViewModel, calendarState: UseCaseState, paddi
 }
 
 @Composable
-fun Header(viewModel: MealsViewModel, paddingValues: PaddingValues, showCalendar: () -> Unit){
+fun Header(viewModel: ExercisesViewModel, paddingValues: PaddingValues, showCalendar: () -> Unit){
     Spacer(modifier = Modifier.padding(paddingValues))
     val filterItems by viewModel.filterItemList.observeAsState(initial = listOf(
         FilterItem("Hoy", { viewModel.changeFilter(0, "today") }, true),
@@ -94,14 +94,14 @@ fun Header(viewModel: MealsViewModel, paddingValues: PaddingValues, showCalendar
 }
 
 @Composable
-fun Body(viewModel: MealsViewModel){
+fun Body(viewModel: ExercisesViewModel){
     val records by viewModel.records.observeAsState(initial = listOf())
 
     if(records.isEmpty()){
         WarningNoData()
     } else {
         records.forEach { record ->
-            InfoRow(title = record.type, description = record.name, score = record.score, icon = Icons.Rounded.AccessTime) {}
+            InfoRow(title = record.name, description = "Duración: " + record.duration.toString() + " min", score = record.score, icon = Icons.Rounded.AccessTime) {}
         }
     }
 
@@ -109,6 +109,6 @@ fun Body(viewModel: MealsViewModel){
 }
 
 @Composable
-fun Footer(viewModel: MealsViewModel){
-    RoundedButton(text = "Añadir Comida", fullWidth = true, bold = true, onClick = {viewModel.navigate("MealRegistry")})
+fun Footer(viewModel: ExercisesViewModel){
+    RoundedButton(text = "Agregar Ejercicio", fullWidth = true, bold = true, onClick = {viewModel.navigate("ExerciseRegistry")})
 }

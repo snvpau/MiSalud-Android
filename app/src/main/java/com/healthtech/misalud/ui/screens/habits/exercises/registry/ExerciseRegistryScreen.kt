@@ -1,4 +1,4 @@
-package com.healthtech.misalud.ui.screens.habits.meals.registry
+package com.healthtech.misalud.ui.screens.habits.exercises.registry
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,15 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
+import com.healthtech.misalud.core.viewModels.ExercisesViewModel
 import com.healthtech.misalud.ui.components.InputField
-import com.healthtech.misalud.ui.components.RadialSelector
-import com.healthtech.misalud.ui.components.RoundedButton
-import com.healthtech.misalud.core.viewModels.MealsViewModel
 import com.healthtech.misalud.ui.components.CustomScaffold
+import com.healthtech.misalud.ui.components.RoundedButton
 import com.healthtech.misalud.ui.components.ScoreSlider
 
 @Composable
-fun MealRegistryScreen(viewModel: MealsViewModel){
+fun ExerciseRegistryScreen(viewModel: ExercisesViewModel){
     val isLoading : Boolean by viewModel.isLoading.observeAsState(initial = false)
 
     if(isLoading){
@@ -32,7 +31,7 @@ fun MealRegistryScreen(viewModel: MealsViewModel){
         }
     } else {
         CustomScaffold(
-            title = "Añadir Comida",
+            title = "Añadir Ejercicio",
             returnRoute = "HomeScreen",
             content = { ScreenContents(viewModel, it) }
         )
@@ -40,7 +39,7 @@ fun MealRegistryScreen(viewModel: MealsViewModel){
 }
 
 @Composable
-fun ScreenContents(viewModel: MealsViewModel, paddingValues: PaddingValues){
+fun ScreenContents(viewModel: ExercisesViewModel, paddingValues: PaddingValues){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,33 +54,29 @@ fun ScreenContents(viewModel: MealsViewModel, paddingValues: PaddingValues){
 }
 
 @Composable
-fun Body(viewModel: MealsViewModel){
+fun Body(viewModel: ExercisesViewModel){
     val name : String by viewModel.name.observeAsState(initial = "")
-    val items = listOf("Desayuno", "Comida", "Cena", "Colación")
-    val score : Float by viewModel.score.observeAsState(initial = 0f)
-    val selectorState : String by viewModel.selectorState.observeAsState(items[0])
-    viewModel.onSelectorChange(selectorState)
+    val duration : String by viewModel.duration.observeAsState(initial = "")
+    val score : Float by viewModel.score.observeAsState(initial = 1f)
+
+    viewModel.onScoreChange(score)
 
     InputField(
-        placeholder = "Nombre del Alimento",
+        placeholder = "Nombre del Ejercicio",
         onChange = { viewModel.onNameChange(it) },
-        textValue = name
+        textValue = name,
     )
 
-    Spacer(modifier = Modifier.padding(5.dp))
-
-    RadialSelector(
-        items = items,
-        selector = selectorState,
-        onChange = { viewModel.onSelectorChange(it) },
-        paddingTop = 3,
-        paddingItem = 6
+    InputField(
+        placeholder = "Duracion del ejercicio (Minutos)",
+        onChange = { viewModel.onDurationChange(it) },
+        textValue = duration,
+        spaced = true,
+        padding = 5
     )
-
-    Spacer(modifier = Modifier.padding(5.dp))
 
     ScoreSlider(
-        title = "Calificación del Alimento",
+        title = "Calificación del Ejercicio",
         score = score,
         onChangeFunction = { viewModel.onScoreChange(it) },
         spaced = true,
@@ -90,9 +85,9 @@ fun Body(viewModel: MealsViewModel){
 }
 
 @Composable
-fun Footer(viewModel: MealsViewModel){
+fun Footer(viewModel: ExercisesViewModel){
     RoundedButton(
-        text = "Agregar Comida",
+        text = "Añadir Ejercicio",
         onClick = { viewModel.addRecord() },
         fullWidth = true,
         bold = true

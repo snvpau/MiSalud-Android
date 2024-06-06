@@ -56,4 +56,20 @@ class AuthService {
             return@withContext response.body()!!
         }
     }
+
+    suspend fun doChangePassword(uuid: String, newPassword: String) : AuthResponses.PostChangePassword {
+        val changePasswordRequest = AuthRequests.PostChangePassword(uuid, newPassword)
+
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(AuthClient::class.java).doChangePassword(changePasswordRequest)
+
+            if(!response.isSuccessful) {
+                val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                return@withContext Gson().fromJson<AuthResponses.PostChangePassword?>(jsonObject, AuthResponses.PostChangePassword::class.java)
+            }
+
+            return@withContext response.body()!!
+        }
+    }
+
 }

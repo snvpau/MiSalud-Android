@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -50,7 +50,7 @@ fun ActionRow(title: String, description: String, icon: ImageVector, onClickFunc
                 Text(text = description)
             }
             Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
-                Icon(Icons.Rounded.ArrowForward, contentDescription = null)
+                Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = null)
             }
         }
     }

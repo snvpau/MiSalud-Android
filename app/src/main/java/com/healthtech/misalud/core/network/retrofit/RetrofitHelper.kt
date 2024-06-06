@@ -7,14 +7,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitHelper {
     fun getRetrofitAuth() : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://ms-auth-gez4.onrender.com")
+            .baseUrl("https://ms-auth-seven.vercel.app")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     fun getRetrofitPeople() : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://ms-people.onrender.com")
+            .baseUrl("https://ms-people.vercel.app")
             .client(createPeopleAuth())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
