@@ -126,8 +126,8 @@ fun RegistryScreen(viewModel: RegistryViewModel) {
                     onClick = { viewModel.onRegisterSelected() },
                     fullWidth = true,
                     enabled = registerEnabled,
-                    backgroundColor = Color(44, 90, 168),
-                    disabledBackgroundColor = Color(99, 156, 255, 255),
+                    backgroundColor = Color(2, 172, 237),
+                    disabledBackgroundColor = Color(102, 192, 226, 255),
                     contentColor = Color.White,
                     disabledContentColor = Color.White,
                     height = 48

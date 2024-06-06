@@ -23,7 +23,7 @@ fun FilterBar(items: List<FilterItem>){
                 bold = true,
                 onClick = { item.action() },
                 spaced = false,
-                selected = item.selected
+                selected = item.selected,
             )
         }
     }

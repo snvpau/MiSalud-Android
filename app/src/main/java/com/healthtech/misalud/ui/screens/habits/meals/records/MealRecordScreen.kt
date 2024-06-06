@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.healthtech.misalud.core.viewModels.MealsViewModel
 import com.healthtech.misalud.ui.components.CustomScaffold
@@ -117,5 +118,12 @@ fun Body(viewModel: MealsViewModel){
 
 @Composable
 fun Footer(viewModel: MealsViewModel){
-    RoundedButton(text = "Añadir Comida", fullWidth = true, bold = true, onClick = {viewModel.navigate("MealRegistry")})
+    RoundedButton(
+        text = "Añadir Comida",
+        fullWidth = true,
+        bold = true,
+        backgroundColor = Color(2, 172, 237),
+        contentColor = Color.White,
+        onClick = {viewModel.navigate("MealRegistry")}
+    )
 }
