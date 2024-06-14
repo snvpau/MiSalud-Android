@@ -49,7 +49,8 @@ class MealsViewModel: ViewModel() {
 
     fun onNameChange(text: String){
         _name.value = text
-        _submitEnabled.value = _name.value!!.length > 2
+        val hasNumbers = text.any { it.isDigit() }
+        _submitEnabled.value = _name.value!!.length > 2 && !hasNumbers
     }
 
     fun onSelectorChange(state: String){
