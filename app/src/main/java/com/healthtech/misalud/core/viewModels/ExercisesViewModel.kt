@@ -59,7 +59,7 @@ class ExercisesViewModel: ViewModel() {
         val nameValid = _name.value?.let { it.length > 2 && !it.any { char -> char.isDigit() } } ?: false
 
         // Verifica que el campo de duración solo contenga números
-        val durationValid = _duration.value?.let { it.matches("-?\\d+(\\.\\d+)?".toRegex()) } ?: false
+        val durationValid = _duration.value?.matches("-?\\d+(\\.\\d+)?".toRegex()) ?: false
 
         // Habilita el botón de submit solo si ambos campos son válidos
         _submitEnabled.value = nameValid && durationValid
@@ -113,7 +113,7 @@ class ExercisesViewModel: ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = async { _peopleService.doGetRecordDays(accessToken, uuid) }
+            val result = async { _peopleService.doGetExerciseRecordDays(accessToken, uuid) }
             val infoDeffered = result.await()
 
             if(infoDeffered.success){
