@@ -49,7 +49,8 @@ class MealsViewModel: ViewModel() {
 
     fun onNameChange(text: String){
         _name.value = text
-        _submitEnabled.value = _name.value!!.length > 2
+        val hasNumbers = text.any { it.isDigit() }
+        _submitEnabled.value = _name.value!!.length > 2 && !hasNumbers
     }
 
     fun onSelectorChange(state: String){
@@ -107,7 +108,7 @@ class MealsViewModel: ViewModel() {
             val accessToken = "Bearer " + TokenManagement.accessToken
             val uuid = UserManagement.getUserAttributeString("uuid")!!
 
-            val result = async { _peopleService.doGetRecordDays(accessToken, uuid) }
+            val result = async { _peopleService.doGetMealRecordDays(accessToken, uuid) }
             val infoDeffered = result.await()
 
             if(infoDeffered.success){
