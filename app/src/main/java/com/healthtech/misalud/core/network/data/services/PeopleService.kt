@@ -25,9 +25,22 @@ class PeopleService {
         }
     }
 
-    suspend fun doGetRecordDays(accessToken: String, uuid: String) : PeopleResponses.GetRecordDays {
+    suspend fun doGetMealRecordDays(accessToken: String, uuid: String) : PeopleResponses.GetRecordDays {
         return withContext(Dispatchers.IO){
-            val response = retrofit.create(PeopleClient::class.java).doGetRecordDays(accessToken, uuid)
+            val response = retrofit.create(PeopleClient::class.java).doGetMealRecordDays(accessToken, uuid)
+
+            if(!response.isSuccessful) {
+                val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()
+                return@withContext Gson().fromJson<PeopleResponses.GetRecordDays?>(jsonObject, PeopleResponses.GetRecordDays::class.java)
+            }
+
+            return@withContext response.body()!!
+        }
+    }
+
+    suspend fun doGetExerciseRecordDays(accessToken: String, uuid: String) : PeopleResponses.GetRecordDays {
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(PeopleClient::class.java).doGetExerciseRecordDays(accessToken, uuid)
 
             if(!response.isSuccessful) {
                 val jsonObject = JSONObject(response.errorBody()!!.charStream().readText()).toString()

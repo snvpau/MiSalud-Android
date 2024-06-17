@@ -16,8 +16,8 @@ interface PeopleClient {
         @Query("phoneNumber") phoneNumber: String
     ) : Response<PeopleResponses.GetUserData>
 
-    @GET("/api/v1/people/getRecordDays")
-    suspend fun doGetRecordDays(
+    @GET("/api/v1/people/meals/getRecordDays")
+    suspend fun doGetMealRecordDays(
         @Header("Authorization") accessToken: String,
         @Query("uuid") uuid: String
     ) : Response<PeopleResponses.GetRecordDays>
@@ -35,6 +35,12 @@ interface PeopleClient {
         @Query("uuid") uuid: String,
         @Query("range") range: String
     ) : Response<PeopleResponses.GetExerciseRecords>
+
+    @GET("/api/v1/people/exercises/getRecordDays")
+    suspend fun doGetExerciseRecordDays(
+        @Header("Authorization") accessToken: String,
+        @Query("uuid") uuid: String
+    ) : Response<PeopleResponses.GetRecordDays>
 
     @GET("/api/v1/people/ui/data/app?")
     suspend fun doGetHomeScreenData(
